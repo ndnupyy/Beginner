@@ -1,0 +1,68 @@
+/* ============================================================
+   文件作用：首页文章搜索框样式
+   功能对应：首页顶部的搜索输入框
+   如果搜索框样式不对，修改这个文件
+   ============================================================ */
+
+/* 搜索区域容器 */
+.article-search-bar {
+  /* 与下方文章列表的间距 */
+  margin-bottom: 24px;
+}
+
+/* 搜索输入框外层（带图标） */
+.article-search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 搜索图标 */
+.article-search-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  color: #bbb;
+  /* 图标不响应鼠标事件，让点击穿透到输入框 */
+  pointer-events: none;
+}
+
+/* 搜索输入框 */
+.article-search-input {
+  width: 100%;
+  /* 左内边距留出图标位置 */
+  padding: 12px 16px 12px 40px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+/* 输入框获得焦点时，边框变为主题色 */
+.article-search-input:focus {
+  border-color: #fc5531;
+}
+
+/* 输入框占位文字颜色 */
+.article-search-input::placeholder {
+  color: #ccc;
+}
+
+/* 搜索结果提示文字（如"找到 2 篇相关文章"） */
+.article-search-result-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #999;
+}
+
+/* 搜索无结果时的提示 */
+.article-search-no-result {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+}

@@ -1,19 +1,23 @@
 [
   {
-    "id": "1",
-    "title": "白嫖48GB显存跑DeepSeek! AMD云GPU私有化部署实战",
-    "content": "本文详细介绍如何在 AMD 云 GPU 上部署 DeepSeek 大模型，实现 48GB 显存的高效利用。\n\n## 环境准备\n\n首先需要准备一台带有 AMD GPU 的云服务器...\n\n## 部署步骤\n\n1. 安装 ROCm 驱动\n2. 下载 DeepSeek 模型\n3. 配置推理服务\n\n## 总结\n\n通过本文的步骤，你可以零成本体验大模型私有化部署。",
-    "summary": "详细介绍如何在 AMD 云 GPU 上部署 DeepSeek 大模型，实现 48GB 显存的高效利用，包含完整的环境准备和部署步骤。",
-    "authorName": "AI辅助软件开发伍斌",
+    "id": "3",
+    "title": "Java 后端开发者如何快速上手 JavaScript",
+    "content": "如果你已经会 Java，学习 JavaScript 会比从零开始容易很多。\n\n## 相似之处\n\n- 都有变量、函数、循环、条件判断\n- 都有面向对象的概念\n\n## 主要区别\n\n- JavaScript 是弱类型语言\n- JavaScript 可以直接在浏览器中运行\n\n## 学习建议\n\n先做一个实际项目（比如博客），边做边学效果最好。",
+    "summary": "如果你已经会 Java，学习 JavaScript 会比从零开始容易很多。本文对比了两者的异同，并给出学习建议。",
+    "authorName": "全栈学习者",
     "authorAvatar": "/default-avatar.svg",
-    "thumbnailUrl": "https://picsum.photos/seed/deepseek/200/130",
-    "tags": ["DeepSeek", "GPU", "部署"],
-    "category": "人工智能",
+    "thumbnailUrl": "https://picsum.photos/seed/javascript/200/130",
+    "tags": [
+      "JavaScript",
+      "Java",
+      "学习"
+    ],
+    "category": "编程语言",
     "articleType": "原创",
     "visibility": "全部可见",
-    "views": 2900,
-    "createdAt": "2026-06-20T10:00:00.000Z",
-    "updatedAt": "2026-06-20T10:00:00.000Z"
+    "views": 891,
+    "createdAt": "2026-06-25T09:15:00.000Z",
+    "updatedAt": "2026-06-29T07:23:20.398Z"
   },
   {
     "id": "2",
@@ -23,7 +27,11 @@
     "authorName": "博客新手",
     "authorAvatar": "/default-avatar.svg",
     "thumbnailUrl": "https://picsum.photos/seed/nextjs/200/130",
-    "tags": ["Next.js", "React", "入门"],
+    "tags": [
+      "Next.js",
+      "React",
+      "入门"
+    ],
     "category": "前端开发",
     "articleType": "原创",
     "visibility": "全部可见",
@@ -32,19 +40,23 @@
     "updatedAt": "2026-06-22T14:30:00.000Z"
   },
   {
-    "id": "3",
-    "title": "Java 后端开发者如何快速上手 JavaScript",
-    "content": "如果你已经会 Java，学习 JavaScript 会比从零开始容易很多。\n\n## 相似之处\n\n- 都有变量、函数、循环、条件判断\n- 都有面向对象的概念\n\n## 主要区别\n\n- JavaScript 是弱类型语言\n- JavaScript 可以直接在浏览器中运行\n\n## 学习建议\n\n先做一个实际项目（比如博客），边做边学效果最好。",
-    "summary": "如果你已经会 Java，学习 JavaScript 会比从零开始容易很多。本文对比了两者的异同，并给出学习建议。",
-    "authorName": "全栈学习者",
+    "id": "1",
+    "title": "白嫖48GB显存跑DeepSeek! AMD云GPU私有化部署实战",
+    "content": "本文详细介绍如何在 AMD 云 GPU 上部署 DeepSeek 大模型，实现 48GB 显存的高效利用。\n\n## 环境准备\n\n首先需要准备一台带有 AMD GPU 的云服务器...\n\n## 部署步骤\n\n1. 安装 ROCm 驱动\n2. 下载 DeepSeek 模型\n3. 配置推理服务\n\n## 总结\n\n通过本文的步骤，你可以零成本体验大模型私有化部署。",
+    "summary": "详细介绍如何在 AMD 云 GPU 上部署 DeepSeek 大模型，实现 48GB 显存的高效利用，包含完整的环境准备和部署步骤。",
+    "authorName": "AI辅助软件开发伍斌",
     "authorAvatar": "/default-avatar.svg",
-    "thumbnailUrl": "https://picsum.photos/seed/javascript/200/130",
-    "tags": ["JavaScript", "Java", "学习"],
-    "category": "编程语言",
+    "thumbnailUrl": "https://picsum.photos/seed/deepseek/200/130",
+    "tags": [
+      "DeepSeek",
+      "GPU",
+      "部署"
+    ],
+    "category": "人工智能",
     "articleType": "原创",
     "visibility": "全部可见",
-    "views": 890,
-    "createdAt": "2026-06-25T09:15:00.000Z",
-    "updatedAt": "2026-06-25T09:15:00.000Z"
+    "views": 2900,
+    "createdAt": "2026-06-20T10:00:00.000Z",
+    "updatedAt": "2026-06-20T10:00:00.000Z"
   }
 ]

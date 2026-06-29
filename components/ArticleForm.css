@@ -1,0 +1,43 @@
+/* ============================================================
+   文件作用：写文章/编辑文章的单页表单布局样式
+   功能对应：编辑内容和发布设置在同一页面，通过滚动切换
+   如果两个区块之间的间距/分隔线不对，修改这个文件
+   ============================================================ */
+
+/* 单页表单外层容器 */
+.article-form-page {
+  /* 去掉 page-container 默认的底部限制，让页面自然变长可滚动 */
+  padding-bottom: 40px;
+}
+
+/* 每个区块（编辑内容 / 发布设置） */
+.article-form-section {
+  /* 区块之间的间距 */
+  margin-bottom: 24px;
+}
+
+/* 区块标题（"编辑内容"、"发布设置"） */
+.article-form-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  /* 标题左侧橙色竖线装饰 */
+  padding-left: 12px;
+  border-left: 3px solid #fc5531;
+  margin-bottom: 16px;
+}
+
+/* 嵌入模式下，编辑器容器去掉过大的最小高度 */
+.editor-container.embedded {
+  min-height: auto;
+}
+
+/* 嵌入模式下，设置表单去掉顶部重复的标题样式间距 */
+.settings-container.embedded {
+  margin-top: 0;
+}
+
+/* 嵌入模式下，发布按钮区域靠右对齐（没有"返回"按钮了） */
+.settings-actions.single-page {
+  justify-content: flex-end;
+}

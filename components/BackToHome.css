@@ -1,0 +1,22 @@
+/* ============================================================
+   文件作用：返回首页链接样式
+   功能对应：各子页面顶部的"← 返回首页"链接
+   如果返回链接样式不对，修改这个文件
+   ============================================================ */
+
+/* 返回首页链接 */
+.back-to-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #999;
+  transition: color 0.2s;
+}
+
+/* 鼠标悬停时变为主题色 */
+.back-to-home:hover {
+  color: #fc5531;
+}

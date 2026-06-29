@@ -1,16 +1,16 @@
 // ============================================================
 // 文件作用：文章详情页（Read - 查看单篇文章）
 // 访问地址：http://localhost:3000/article/[id]
-// 功能对应：显示文章完整内容、作者信息、标签、编辑/删除按钮
+// 功能对应：显示文章完整内容、作者信息、标签、编辑/删除按钮（不含封面图）
 // 如果文章详情显示不对 / 阅读量不增加，检查这个文件
 // ============================================================
 
-import { getArticleById, incrementViews, formatViews } from "@/lib/articles";
+import { getArticleById, incrementViews } from "@/lib/articles";
+import { formatViews } from "@/lib/format";
 // 引入操作按钮组件（编辑、删除）
 import ArticleActions from "@/components/ArticleActions";
-// notFound 是 Next.js 提供的函数，调用后会显示 404 页面
+import BackToHome from "@/components/BackToHome";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 
 /**
  * ArticleDetailPage - 文章详情页
@@ -42,12 +42,7 @@ export default async function ArticleDetailPage({ params }) {
 
   return (
     <div className="page-container">
-      {/* 返回首页链接 */}
-      <div style={{ marginBottom: "16px" }}>
-        <Link href="/" style={{ color: "#999", textDecoration: "none", fontSize: "14px" }}>
-          ← 返回首页
-        </Link>
-      </div>
+      <BackToHome />
 
       {/* 文章详情容器 */}
       <article className="article-detail">
@@ -88,23 +83,7 @@ export default async function ArticleDetailPage({ params }) {
           </div>
         )}
 
-        {/* 封面图（如果有） */}
-        {updatedArticle.thumbnailUrl && (
-          <div style={{ marginBottom: "24px" }}>
-            <img
-              src={updatedArticle.thumbnailUrl}
-              alt={updatedArticle.title}
-              style={{
-                width: "100%",
-                maxHeight: "400px",
-                objectFit: "cover",
-                borderRadius: "8px",
-              }}
-            />
-          </div>
-        )}
-
-        {/* 文章正文内容 */}
+        {/* 文章正文内容（封面图仅在首页卡片展示，详情页不显示） */}
         <div className="article-detail-content">
           {updatedArticle.content}
         </div>

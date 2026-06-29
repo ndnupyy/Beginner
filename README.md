@@ -29,14 +29,17 @@ npm run dev
 
 | 你看到的界面/功能 | 对应文件 | 说明 |
 |---|---|---|
-| **顶部导航栏**（Logo + 写文章按钮） | `components/Header.js` + `components/Header.css` | 每个页面顶部都有 |
+| **顶部导航栏**（Logo + 写文章） | `components/Header.js` + `components/Header.css` | 点击 Logo 回首页并清除搜索 |
+| **返回首页链接** | `components/BackToHome.js` + `components/BackToHome.css` | 写文章、编辑、详情页顶部的「← 返回首页」 |
 | **首页文章列表**（图一卡片） | `app/page.js` | 首页路由 |
+| **首页标题搜索** | `components/ArticleSearchList.js` | 搜索框 + 按标题过滤 |
 | **单篇文章卡片**（作者/标题/摘要/阅读量/缩略图） | `components/PostCard.js` + `components/PostCard.css` | 首页每篇文章的展示 |
 | **文章详情页**（查看完整文章） | `app/article/[id]/page.js` | 点击卡片后进入 |
 | **编辑/删除按钮** | `components/ArticleActions.js` | 详情页底部 |
 | **写文章 - 第1步**（标题+正文，图二） | `components/ArticleEditor.js` + `components/ArticleEditor.css` | 标题字数验证也在此 |
 | **写文章 - 第2步**（标签/封面/摘要等，图三） | `components/ArticleSettings.js` + `components/ArticleSettings.css` | 发布设置表单 |
-| **发布文章页面**（两步流程串联） | `app/write/page.js` | 访问 /write |
+| **写文章/编辑文章单页表单** | `components/ArticleForm.js` | 编辑内容 + 发布设置在同一页，滚动切换 |
+| **发布文章页面** | `app/write/page.js` | 访问 /write |
 | **编辑文章页面** | `app/edit/[id]/page.js` | 访问 /edit/文章ID |
 | **全局样式**（背景色/字体/通用布局） | `app/globals.css` | 全站通用样式 |
 | **网站整体外壳**（导航栏+页面结构） | `app/layout.js` | 所有页面的父容器 |
@@ -45,8 +48,29 @@ npm run dev
 
 | 功能 | 对应文件 | 说明 |
 |---|---|---|
-| **文章数据存储** | `data/articles.json` | 所有文章保存在这个 JSON 文件里 |
-| **数据读写逻辑**（增删改查核心） | `lib/articles.js` | 类似 Java 的 Service 层 |
+| **SQLite 数据库连接与建表** | `lib/db.js` | 数据库文件、表结构、首次导入示例数据 |
+| **文章数据存储** | `data/blog.db` | SQLite 数据库文件（运行时自动生成） |
+| **示例数据（仅首次导入用）** | `data/articles.json` | 首次启动时若数据库为空，会导入这里的示例 |
+| **数据读写逻辑**（增删改查核心） | `lib/articles.js` | 类似 Java 的 Service 层，操作 SQLite |
+
+### SQLite 数据库表结构（articles 表）
+
+| 数据库字段 | 对应发布表单 | 说明 |
+|---|---|---|
+| `title` | 文章标题（图二） | 5~100 字 |
+| `content` | 文章正文（图二） | 正文内容 |
+| `tags` | 文章标签（图三） | JSON 字符串存储数组 |
+| `thumbnail_url` | 封面图（图三） | 支持 URL 或 base64 |
+| `summary` | 文章摘要（图三） | 最多 256 字 |
+| `category` | 分类专栏（图三） | 分类名称 |
+| `article_type` | 文章类型（图三） | 原创 / 转载 / 翻译 |
+| `visibility` | 可见范围（图三） | 全部可见 / 仅我可见 |
+| `author_name` | 作者名 | 默认"博客作者" |
+| `author_avatar` | 作者头像 | 默认 `/default-avatar.svg` |
+| `views` | 阅读量 | 每次查看详情 +1 |
+| `created_at` / `updated_at` | — | 创建/更新时间 |
+
+> 数据库文件路径：`data/blog.db`（首次启动自动生成，并从 `articles.json` 导入示例数据）
 | **API：获取列表 + 创建文章** | `app/api/articles/route.js` | GET / POST |
 | **API：查单篇 + 改 + 删** | `app/api/articles/[id]/route.js` | GET / PUT / DELETE |
 
@@ -81,9 +105,11 @@ d:\demo1\
 │   ├── ArticleSettings.js / .css ← 设置表单（图三）
 │   └── ArticleActions.js         ← 编辑/删除按钮
 ├── lib/
+│   ├── db.js                     ← SQLite 连接与建表
 │   └── articles.js               ← 数据读写（Service 层）
 ├── data/
-│   └── articles.json             ← 文章数据文件
+│   ├── blog.db                   ← SQLite 数据库（运行后自动生成）
+│   └── articles.json             ← 示例数据（首次导入用）
 └── public/
     └── default-avatar.svg        ← 默认头像
 ```
@@ -155,7 +181,7 @@ Next.js 根据 `app/` 下的文件夹结构自动生成 URL：
   → 第2步 ArticleSettings（标签+封面+摘要等）
   → POST /api/articles → app/api/articles/route.js
   → lib/articles.js 的 createArticle()
-  → 写入 data/articles.json
+  → 写入 SQLite 数据库 data/blog.db
 ```
 
 ### 查 (Read) - 查看文章
@@ -186,7 +212,7 @@ Next.js 根据 `app/` 下的文件夹结构自动生成 URL：
 
 | 问题 | 检查哪里 |
 |---|---|
-| 首页看不到文章 | `data/articles.json` 是否有数据？`lib/articles.js` 读取是否正常？ |
+| 首页看不到文章 | `data/blog.db` 是否存在？`lib/db.js` 和 `lib/articles.js` 是否正常？ |
 | 发布按钮点了没反应 | `app/write/page.js` 的 handlePublish 函数 |
 | 标题字数提示不对 | `components/ArticleEditor.js` 的 MIN_TITLE_LENGTH |
 | 卡片样式不对 | `components/PostCard.css` |

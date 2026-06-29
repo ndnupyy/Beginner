@@ -8,7 +8,7 @@
 // 引入 Next.js 的 Link 组件，点击卡片跳转到文章详情页
 import Link from "next/link";
 // 引入阅读量格式化函数（如 2900 → "2.9k"）
-import { formatViews } from "@/lib/articles";
+import { formatViews } from "@/lib/format";
 // 引入本组件的 CSS 样式
 import "./PostCard.css";
 
@@ -67,17 +67,13 @@ export default function PostCard({ article }) {
           </div>
         </div>
 
-        {/* 右侧缩略图：有图片就显示，没有就显示占位 */}
-        {thumbnailUrl ? (
+        {/* 右侧缩略图：只有上传了封面才显示，没有封面时文字区域自动铺满 */}
+        {thumbnailUrl && (
           <img
             src={thumbnailUrl}
             alt={title}
             className="post-card-thumbnail"
           />
-        ) : (
-          <div className="post-card-thumbnail-placeholder">
-            暂无封面
-          </div>
         )}
       </div>
     </Link>

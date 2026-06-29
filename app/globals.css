@@ -1,0 +1,237 @@
+/* ============================================================
+   文件作用：全局 CSS 样式（整个网站通用的样式）
+   功能对应：页面背景色、字体、通用布局容器等
+   如果整体页面风格/背景/字体出问题，修改这个文件
+   ============================================================ */
+
+/* 重置所有元素的默认 margin 和 padding */
+* {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box 让 width 包含 padding 和 border */
+  box-sizing: border-box;
+}
+
+/* 页面 body 的全局样式 */
+body {
+  /* 字体：优先使用系统字体，保证中英文都好看 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  /* 背景色：浅灰色（类似 CSDN 的背景） */
+  background: #f5f6f7;
+  /* 默认文字颜色 */
+  color: #333;
+  /* 字体大小 */
+  font-size: 14px;
+  /* 行高 */
+  line-height: 1.5;
+  /* 平滑字体渲染 */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 通用页面容器：限制最大宽度并居中 */
+.page-container {
+  /* 最大宽度 960px */
+  max-width: 960px;
+  /* 水平居中 */
+  margin: 0 auto;
+  /* 内边距 */
+  padding: 20px;
+}
+
+/* 通用页面标题 */
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 空状态提示（没有文章时显示） */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state-text {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* 空状态下的"去写文章"链接 */
+.empty-state-link {
+  display: inline-block;
+  padding: 10px 24px;
+  background: #fc5531;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.empty-state-link:hover {
+  background: #e04a2a;
+}
+
+/* ===== 文章详情页样式 ===== */
+
+/* 详情页文章容器 */
+.article-detail {
+  background: #fff;
+  border-radius: 8px;
+  padding: 40px;
+}
+
+/* 详情页标题 */
+.article-detail-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+/* 详情页元信息（作者、时间、阅读量） */
+.article-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 详情页作者信息 */
+.article-detail-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.article-detail-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+/* 详情页标签列表 */
+.article-detail-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.article-detail-tag {
+  padding: 4px 10px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* 详情页正文内容 */
+.article-detail-content {
+  font-size: 16px;
+  line-height: 2;
+  color: #333;
+  /* 保留换行符（white-space: pre-wrap 让 \n 显示为换行） */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 详情页底部操作栏（编辑、删除按钮） */
+.article-detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* 编辑按钮 */
+.btn-edit {
+  padding: 8px 20px;
+  background: #fff;
+  border: 1px solid #fc5531;
+  color: #fc5531;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-edit:hover {
+  background: #fc5531;
+  color: #fff;
+}
+
+/* 删除按钮 */
+.btn-delete {
+  padding: 8px 20px;
+  background: #fff;
+  border: 1px solid #ff4d4f;
+  color: #ff4d4f;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+/* ===== 发布页步骤指示器 ===== */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #999;
+}
+
+.step-item.active {
+  color: #fc5531;
+  font-weight: 600;
+}
+
+.step-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 2px solid #ddd;
+}
+
+.step-item.active .step-number {
+  border-color: #fc5531;
+  background: #fc5531;
+  color: #fff;
+}
+
+.step-divider {
+  width: 40px;
+  height: 1px;
+  background: #ddd;
+}

@@ -1,0 +1,295 @@
+/* ============================================================
+   文件作用：文章发布设置表单样式（对应图三）
+   功能对应：发布文章时的标签、封面、摘要、分类、类型、可见范围等设置
+   如果设置表单布局/样式出问题，修改这个文件
+   ============================================================ */
+
+/* 设置表单外层容器 */
+.settings-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 30px 40px;
+}
+
+/* 设置表单标题 */
+.settings-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 每一行表单项：左边标签 + 右边输入 */
+.settings-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+/* 左侧标签 */
+.settings-label {
+  width: 100px;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: #666;
+  padding-top: 8px;
+  text-align: right;
+  padding-right: 20px;
+}
+
+/* 右侧输入区域 */
+.settings-field {
+  flex: 1;
+}
+
+/* 通用输入框 */
+.settings-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.settings-input:focus {
+  border-color: #fc5531;
+}
+
+/* 文本域（摘要） */
+.settings-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.settings-textarea:focus {
+  border-color: #fc5531;
+}
+
+/* 字数统计 */
+.settings-char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #bbb;
+  margin-top: 4px;
+}
+
+/* 添加标签按钮 */
+.settings-add-btn {
+  padding: 8px 16px;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  background: #fafafa;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings-add-btn:hover {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+/* 已添加的标签列表 */
+.settings-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* 单个标签 */
+.settings-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* 标签删除按钮 */
+.settings-tag-remove {
+  cursor: pointer;
+  color: #999;
+  font-size: 14px;
+  border: none;
+  background: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.settings-tag-remove:hover {
+  color: #fc5531;
+}
+
+/* 标签输入框（添加标签时显示） */
+.settings-tag-input {
+  padding: 6px 10px;
+  border: 1px solid #fc5531;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  width: 120px;
+}
+
+/* 封面上传区域 */
+.settings-cover-row {
+  display: flex;
+  gap: 16px;
+}
+
+/* 上传按钮区域 */
+.settings-cover-upload {
+  width: 160px;
+  height: 100px;
+  border: 1px dashed #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #999;
+  font-size: 13px;
+  transition: all 0.2s;
+  background: #fafafa;
+}
+
+.settings-cover-upload:hover {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+/* 上传区域的加号图标 */
+.settings-cover-upload-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+/* 封面预览图 */
+.settings-cover-preview {
+  width: 160px;
+  height: 100px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+/* 隐藏的文件选择 input */
+.settings-cover-input-hidden {
+  display: none;
+}
+
+/* 单选按钮组 */
+.settings-radio-group {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+/* 单个单选项 */
+.settings-radio-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* 单选按钮样式 */
+.settings-radio-item input[type="radio"] {
+  accent-color: #fc5531;
+  cursor: pointer;
+}
+
+/* 下拉选择框 */
+.settings-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  background: #fff;
+  min-width: 200px;
+  cursor: pointer;
+}
+
+.settings-select:focus {
+  border-color: #fc5531;
+}
+
+/* 底部操作按钮区域 */
+.settings-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* 返回上一步按钮 */
+.settings-btn-back {
+  padding: 10px 24px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings-btn-back:hover {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+/* 发布按钮 */
+.settings-btn-publish {
+  padding: 10px 32px;
+  border: none;
+  border-radius: 4px;
+  background: #fc5531;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.settings-btn-publish:hover {
+  background: #e04a2a;
+}
+
+.settings-btn-publish:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* 发布中的加载提示 */
+.settings-publishing {
+  font-size: 14px;
+  color: #999;
+}

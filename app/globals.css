@@ -114,32 +114,39 @@ body {
 .article-detail-meta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 12px 16px;
   font-size: 13px;
   color: #999;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #eee;
 }
 
-/* 详情页作者信息 */
-.article-detail-author {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.article-detail-type-tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #fff1ee;
+  color: #fc5531;
+  font-size: 12px;
 }
 
-.article-detail-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+.page-container--article {
+  padding-top: 12px;
 }
 
-/* 详情页标签列表 */
 .article-detail-tags {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
+}
+
+.article-detail-tags-label {
+  font-size: 13px;
+  color: #999;
+  margin-right: 4px;
 }
 
 .article-detail-tag {
@@ -164,9 +171,9 @@ body {
 .article-detail-actions {
   display: flex;
   gap: 12px;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  margin-top: 24px;
+  padding-top: 0;
+  border-top: none;
 }
 
 /* 编辑按钮 */

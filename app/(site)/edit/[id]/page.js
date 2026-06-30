@@ -1,30 +1,21 @@
 "use client";
-// 客户端组件：编辑文章页面
-
 // ============================================================
 // 文件作用：编辑文章页面
 // 访问地址：http://localhost:3000/edit/[id]
-// 功能对应：单页表单 —— 编辑内容和发布设置在同一页面，滚动切换
-// 如果编辑保存失败 / 加载不到文章数据，检查这个文件
 // ============================================================
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import ArticleForm from "@/components/ArticleForm";
-import BackToHome from "@/components/BackToHome";
+import "@/components/WritePage.css";
 
-/**
- * EditPage - 编辑文章页面
- * 先加载已有文章数据，然后在同一页面编辑内容和设置
- */
 export default function EditPage() {
   const router = useRouter();
   const params = useParams();
   const articleId = params.id;
 
-  // 从 API 加载的已有文章数据
   const [existingArticle, setExistingArticle] = useState(null);
-  // 加载状态
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,10 +26,10 @@ export default function EditPage() {
           const data = await response.json();
           setExistingArticle(data);
         } else {
-          alert("文章不存在");
+          alert("文章不存在或无权访问");
           router.push("/");
         }
-      } catch (error) {
+      } catch {
         alert("加载文章失败");
         router.push("/");
       } finally {
@@ -48,29 +39,46 @@ export default function EditPage() {
     loadArticle();
   }, [articleId, router]);
 
-  /**
-   * 保存修改：调用 PUT API 更新文章
-   */
   async function handleSubmit(fullArticle) {
     const response = await fetch(`/api/articles/${articleId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fullArticle),
+      body: JSON.stringify({ ...fullArticle, status: "published" }),
     });
 
     if (response.ok) {
       router.push(`/article/${articleId}`);
+      router.refresh();
     } else {
       const error = await response.json();
-      alert("保存失败：" + (error.error || "未知错误"));
+      alert("发布失败：" + (error.error || "未知错误"));
+    }
+  }
+
+  async function handleSaveDraft(fullArticle) {
+    const response = await fetch(`/api/articles/${articleId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...fullArticle, status: "draft" }),
+    });
+
+    if (response.ok) {
+      const article = await response.json();
+      setExistingArticle(article);
+      alert("草稿已保存");
+    } else {
+      const error = await response.json();
+      alert("保存草稿失败：" + (error.error || "未知错误"));
     }
   }
 
   if (loading) {
     return (
-      <div className="page-container">
-        <div className="empty-state">
-          <p className="empty-state-text">加载中...</p>
+      <div className="write-page">
+        <div className="write-page-inner">
+          <div className="empty-state">
+            <p className="empty-state-text">加载中...</p>
+          </div>
         </div>
       </div>
     );
@@ -80,15 +88,27 @@ export default function EditPage() {
     return null;
   }
 
+  const isDraft = existingArticle.status === "draft";
+
   return (
-    <div className="page-container">
-      <BackToHome />
-      <h1 className="page-title">编辑文章</h1>
-      <ArticleForm
-        initialData={existingArticle}
-        onSubmit={handleSubmit}
-        isEditing={true}
-      />
+    <div className="write-page">
+      <div className="write-page-inner">
+        <div className="write-page-header">
+          <h1 className="write-page-title">
+            {isDraft ? "编辑草稿" : "编辑文章"}
+          </h1>
+          <Link href="/" className="write-page-back">
+            ← 返回首页
+          </Link>
+        </div>
+        <ArticleForm
+          initialData={existingArticle}
+          onSubmit={handleSubmit}
+          onSaveDraft={handleSaveDraft}
+          isEditing
+          isDraft={isDraft}
+        />
+      </div>
     </div>
   );
 }

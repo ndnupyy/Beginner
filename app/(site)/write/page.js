@@ -1,28 +1,17 @@
 "use client";
-// 客户端组件：发布文章页面
-
 // ============================================================
 // 文件作用：发布文章页面
 // 访问地址：http://localhost:3000/write
-// 功能对应：单页表单 —— 编辑内容和发布设置在同一页面，滚动切换
-// 如果发布流程出问题，检查这个文件
 // ============================================================
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ArticleForm from "@/components/ArticleForm";
-import BackToHome from "@/components/BackToHome";
+import "@/components/WritePage.css";
 
-/**
- * WritePage - 发布文章页面
- * 编辑内容和发布设置在同一页面，向下滚动即可切换
- */
 export default function WritePage() {
   const router = useRouter();
 
-  /**
-   * 发布文章：调用 POST API 创建文章
-   * @param {Object} fullArticle - 完整的文章数据
-   */
   async function handleSubmit(fullArticle) {
     const response = await fetch("/api/articles", {
       method: "POST",
@@ -39,11 +28,35 @@ export default function WritePage() {
     }
   }
 
+  async function handleSaveDraft(fullArticle) {
+    const response = await fetch("/api/articles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...fullArticle, status: "draft" }),
+    });
+
+    if (response.ok) {
+      const article = await response.json();
+      alert("草稿已保存");
+      router.push(`/edit/${article.id}`);
+      router.refresh();
+    } else {
+      const error = await response.json();
+      alert("保存草稿失败：" + (error.error || "未知错误"));
+    }
+  }
+
   return (
-    <div className="page-container">
-      <BackToHome />
-      <h1 className="page-title">写文章</h1>
-      <ArticleForm onSubmit={handleSubmit} />
+    <div className="write-page">
+      <div className="write-page-inner">
+        <div className="write-page-header">
+          <h1 className="write-page-title">发布文章</h1>
+          <Link href="/" className="write-page-back">
+            ← 返回首页
+          </Link>
+        </div>
+        <ArticleForm onSubmit={handleSubmit} onSaveDraft={handleSaveDraft} />
+      </div>
     </div>
   );
 }

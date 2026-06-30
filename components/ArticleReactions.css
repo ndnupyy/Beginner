@@ -1,0 +1,68 @@
+/* ============================================================
+   文件作用：文章详情页底部操作栏样式（CSDN 风格）
+   功能对应：ArticleReactions.js
+   维护指引：底栏样式 → 本文件
+   ============================================================ */
+
+.article-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: var(--sidebar-width, 72px);
+  right: 0;
+  z-index: 80;
+  background: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.article-action-bar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.article-action-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 72px;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.article-action-item svg {
+  width: 20px;
+  height: 20px;
+}
+
+.article-action-item:hover:not(:disabled) {
+  background: #f5f6f7;
+  color: #fc5531;
+}
+
+.article-action-item-active {
+  color: #fc5531;
+}
+
+.article-action-item:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.article-action-divider {
+  width: 1px;
+  height: 20px;
+  background: #e8e8e8;
+  margin: 0 8px;
+}

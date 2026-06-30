@@ -1,0 +1,156 @@
+/* ============================================================
+   文件作用：文章详情页左侧作者信息栏样式
+   功能对应：AuthorSidebar.js（CSDN 作者卡片风格，浅色主题）
+   维护指引：作者栏样式 → 本文件
+   ============================================================ */
+
+.author-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 90;
+}
+
+.author-sidebar-card {
+  padding: 20px 16px;
+}
+
+.author-sidebar-loading {
+  color: #999;
+  font-size: 14px;
+}
+
+.author-sidebar-back {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #999;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.author-sidebar-back:hover {
+  color: #fc5531;
+}
+
+.author-sidebar-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.author-sidebar-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.author-sidebar-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.author-sidebar-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.author-sidebar-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #f5f6f7;
+  color: #666;
+  font-size: 11px;
+}
+
+.author-sidebar-creator {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ffe7ba;
+  border-radius: 8px;
+  background: #fffbe6;
+  color: #8c6d1f;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.author-sidebar-creator-icon {
+  flex-shrink: 0;
+}
+
+.author-sidebar-creator strong {
+  color: #d48806;
+}
+
+.author-sidebar-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.author-sidebar-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #999;
+}
+
+.author-sidebar-stat strong {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+.author-sidebar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.author-sidebar-btn {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.author-sidebar-btn-primary {
+  border: none;
+  background: #fc5531;
+  color: #fff;
+}
+
+.author-sidebar-btn-primary:hover {
+  background: #e04a2a;
+}
+
+.author-sidebar-btn-secondary {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #666;
+}
+
+.author-sidebar-btn-secondary:hover {
+  border-color: #fc5531;
+  color: #fc5531;
+}

@@ -1,0 +1,40 @@
+/* ============================================================
+   文件作用：写文章 / 编辑文章页面外层布局
+   功能对应：app/(site)/write、app/(site)/edit
+   ============================================================ */
+
+.write-page {
+  flex: 1;
+  background: #f0f1f2;
+  min-height: calc(100vh - 56px);
+  padding: 16px 24px 80px;
+}
+
+.write-page-inner {
+  max-width: min(1200px, calc(100vw - var(--sidebar-width, 72px) - 48px));
+  margin: 0 auto;
+}
+
+.write-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.write-page-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.write-page-back {
+  font-size: 13px;
+  color: #999;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.write-page-back:hover {
+  color: #fc5531;
+}

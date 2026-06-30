@@ -6,18 +6,8 @@
 //   - 登录页不应出现导航栏 → 登录页在 app/login/，不在 (site) 组内
 // ============================================================
 
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
-import "@/components/SiteShell.css";
+import SiteShell from "@/components/SiteShell";
 
 export default function SiteLayout({ children }) {
-  return (
-    <div className="site-layout">
-      <Sidebar />
-      <div className="site-main">
-        <Header />
-        {children}
-      </div>
-    </div>
-  );
+  return <SiteShell>{children}</SiteShell>;
 }

@@ -1,10 +1,6 @@
 // ============================================================
-// 文件作用：单篇文章 API 路由 - 处理「查单篇 / 改 / 删」
-// 访问地址：GET    /api/articles/[id]  → 获取单篇文章
-//           PUT    /api/articles/[id]  → 更新文章
-//           DELETE /api/articles/[id]  → 删除文章
-// 功能对应：文章详情页、编辑页、删除按钮
-// 如果某篇文章打不开 / 编辑保存失败 / 删除无效，检查这个文件
+// 文件作用：单篇文章 API 路由
+// 访问地址：GET/PUT/DELETE /api/articles/[id]
 // ============================================================
 
 import {
@@ -12,94 +8,112 @@ import {
   updateArticle,
   deleteArticle,
   incrementViews,
+  ARTICLE_STATUS,
 } from "@/lib/articles";
+import { getSessionUserId } from "@/lib/session";
 import { NextResponse } from "next/server";
 
-/**
- * GET - 获取单篇文章详情（Read - 查单篇）
- * @param {Object} context - 包含路由参数 params
- *   params.id 就是 URL 中的 [id]，如 /api/articles/abc123 中的 abc123
- */
 export async function GET(request, { params }) {
   try {
-    // 从 URL 参数中获取文章 ID（Next.js 16 中 params 可能是 Promise，需要 await）
     const { id } = await params;
-    // 根据 ID 查找文章
     const article = await getArticleById(id);
     if (!article) {
-      return NextResponse.json(
-        { error: "文章不存在" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "文章不存在" }, { status: 404 });
     }
+
+    if (article.status === ARTICLE_STATUS.draft) {
+      const userId = await getSessionUserId();
+      if (!userId || userId !== article.authorId) {
+        return NextResponse.json({ error: "文章不存在" }, { status: 404 });
+      }
+    }
+
     const url = new URL(request.url);
-    if (url.searchParams.get("countView") === "true") {
+    if (
+      url.searchParams.get("countView") === "true" &&
+      article.status === ARTICLE_STATUS.published
+    ) {
       await incrementViews(id);
       const updated = await getArticleById(id);
       return NextResponse.json(updated);
     }
-    // 正常返回文章数据
+
     return NextResponse.json(article);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "获取文章失败" },
-      { status: 500 }
-    );
+  } catch {
+    return NextResponse.json({ error: "获取文章失败" }, { status: 500 });
   }
 }
 
-/**
- * PUT - 更新文章（Update - 改）
- */
 export async function PUT(request, { params }) {
   try {
     const { id } = await params;
-    // 解析前端传来的更新数据
     const body = await request.json();
-    // 校验标题长度
-    if (body.title && body.title.length < 5) {
-      return NextResponse.json(
-        { error: "标题至少需要 5 个字" },
-        { status: 400 }
-      );
+    const existing = await getArticleById(id);
+    if (!existing) {
+      return NextResponse.json({ error: "文章不存在" }, { status: 404 });
     }
-    // 执行更新
-    const updated = await updateArticle(id, body);
-    if (!updated) {
-      return NextResponse.json(
-        { error: "文章不存在" },
-        { status: 404 }
-      );
+
+    const userId = await getSessionUserId();
+    if (!userId || userId !== existing.authorId) {
+      return NextResponse.json({ error: "无权编辑此文章" }, { status: 403 });
     }
+
+    const nextStatus =
+      body.status === ARTICLE_STATUS.draft
+        ? ARTICLE_STATUS.draft
+        : body.status === ARTICLE_STATUS.published
+        ? ARTICLE_STATUS.published
+        : existing.status;
+
+    const mergedTitle = body.title ?? existing.title;
+    const mergedContent = body.content ?? existing.content;
+
+    if (nextStatus === ARTICLE_STATUS.published) {
+      if (!mergedTitle || mergedTitle.length < 5) {
+        return NextResponse.json(
+          { error: "标题至少需要 5 个字" },
+          { status: 400 }
+        );
+      }
+      if (!mergedContent || mergedContent.trim().length === 0) {
+        return NextResponse.json(
+          { error: "文章内容不能为空" },
+          { status: 400 }
+        );
+      }
+    }
+
+    const updated = await updateArticle(id, {
+      ...body,
+      status: body.status !== undefined ? nextStatus : undefined,
+    });
+
     return NextResponse.json(updated);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "更新文章失败" },
-      { status: 500 }
-    );
+  } catch {
+    return NextResponse.json({ error: "更新文章失败" }, { status: 500 });
   }
 }
 
-/**
- * DELETE - 删除文章（Delete - 删）
- */
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params;
-    // 执行删除
+    const existing = await getArticleById(id);
+    if (!existing) {
+      return NextResponse.json({ error: "文章不存在" }, { status: 404 });
+    }
+
+    const userId = await getSessionUserId();
+    if (!userId || userId !== existing.authorId) {
+      return NextResponse.json({ error: "无权删除此文章" }, { status: 403 });
+    }
+
     const success = await deleteArticle(id);
     if (!success) {
-      return NextResponse.json(
-        { error: "文章不存在" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "文章不存在" }, { status: 404 });
     }
-    // 返回成功消息
+
     return NextResponse.json({ message: "删除成功" });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "删除文章失败" },
-      { status: 500 }
-    );
+  } catch {
+    return NextResponse.json({ error: "删除文章失败" }, { status: 500 });
   }
 }

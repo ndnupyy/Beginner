@@ -20,10 +20,23 @@ model articles {
   author_name   String @default("博客作者")
   author_avatar String @default("/default-avatar.svg")
   views         Int    @default(0)
+  likes         Int    @default(0)
+  favorites     Int    @default(0)
+  status        String @default("published")
   created_at    String
   updated_at    String
   author_id     String?
+  reactions     article_reactions[]
+}
 
+model article_reactions {
+  user_id    String
+  article_id String
+  type       String
+  created_at String
+  article    articles @relation(fields: [article_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, article_id, type])
 }
 
 model users {

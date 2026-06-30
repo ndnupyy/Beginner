@@ -1,14 +1,13 @@
 // ============================================================
 // 文件作用：首页文章卡片组件（对应图一）
-// 功能对应：首页每篇文章的展示（作者、标题、摘要、阅读量、缩略图）
-// 注意：不包含点赞和收藏功能（按你的要求已去掉）
+// 功能对应：首页每篇文章的展示（作者、标题、摘要、阅读/点赞/收藏、缩略图）
 // 如果卡片内容显示不对，修改这个文件
 // ============================================================
 
 // 引入 Next.js 的 Link 组件，点击卡片跳转到文章详情页
 import Link from "next/link";
 // 引入阅读量格式化函数（如 2900 → "2.9k"）
-import { formatViews } from "@/lib/format";
+import { formatViews, formatCount } from "@/lib/format";
 // 引入本组件的 CSS 样式
 import "./PostCard.css";
 
@@ -28,6 +27,8 @@ export default function PostCard({ article }) {
     authorAvatar, // 作者头像 URL
     thumbnailUrl, // 封面缩略图 URL
     views,        // 阅读量
+    likes = 0,    // 点赞数
+    favorites = 0, // 收藏数
   } = article;
 
   // 返回 JSX 描述卡片的外观
@@ -57,12 +58,16 @@ export default function PostCard({ article }) {
           <p className="post-card-summary">
             {summary || "暂无摘要"}
           </p>
-          {/* 底部元信息：阅读量 */}
+          {/* 底部元信息：阅读量、点赞、收藏 */}
           <div className="post-card-meta">
-            {/* 阅读量 */}
             <span className="post-card-meta-item">
-              {/* 👁 是 emoji 图标，代替 SVG 图标 */}
               👁 阅读 {formatViews(views)}
+            </span>
+            <span className="post-card-meta-item">
+              👍 {formatCount(likes)}赞
+            </span>
+            <span className="post-card-meta-item">
+              🔖 收藏 {formatCount(favorites)}
             </span>
           </div>
         </div>

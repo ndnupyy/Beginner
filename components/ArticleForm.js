@@ -1,87 +1,100 @@
 "use client";
-// 客户端组件：写文章/编辑文章的统一单页表单
-
 // ============================================================
-// 文件作用：写文章和编辑文章的统一表单（单页滚动）
-// 功能对应：把「编辑内容（图二）」和「发布设置（图三）」放在同一页面
-// 用户通过向下滚动在两个区域之间切换，不再需要点"下一步"
-// 如果表单布局或发布逻辑出问题，检查这个文件
+// 文件作用：写文章 / 编辑文章统一表单（CSDN 宽版布局）
+// 功能对应：编辑器 + 发文设置 + 底部保存草稿 / 发布
 // ============================================================
 
-import { useState } from "react";
-// 文章编辑器（标题 + 正文）
+import { useMemo, useRef, useState } from "react";
 import ArticleEditor from "@/components/ArticleEditor";
-// 发布设置（标签 + 封面 + 摘要等）
 import ArticleSettings from "@/components/ArticleSettings";
 import "./ArticleForm.css";
 
-/**
- * ArticleForm 组件 - 统一的写文章/编辑文章表单
- * @param {Object} props
- *   props.initialData - 初始数据（编辑模式传入已有文章）
- *   props.onSubmit    - 提交回调（发布或保存），由父页面传入 API 调用逻辑
- *   props.isEditing   - 是否为编辑模式（影响按钮文字）
- */
 export default function ArticleForm({
   initialData = {},
   onSubmit,
+  onSaveDraft,
   isEditing = false,
+  isDraft = false,
 }) {
-  // ===== 编辑内容区的状态（图二） =====
-  // 文章标题
+  const settingsRef = useRef(null);
   const [title, setTitle] = useState(initialData.title || "");
-  // 文章正文
   const [content, setContent] = useState(initialData.content || "");
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [publishing, setPublishing] = useState(false);
 
-  /**
-   * 发布/保存按钮点击时的处理
-   * @param {Object} settingsData - 来自 ArticleSettings 的设置项数据
-   */
-  async function handlePublish(settingsData) {
-    // 校验标题和内容（与原来"下一步"的校验逻辑一致）
+  const wordCount = useMemo(
+    () => (title?.length || 0) + (content?.length || 0),
+    [title, content]
+  );
+
+  function getFullArticle(settingsData, status) {
+    return {
+      title,
+      content,
+      ...settingsData,
+      status,
+    };
+  }
+
+  function validatePublish() {
     if (!title || title.length < 5) {
       alert("标题至少需要 5 个字");
-      // 滚动到页面顶部，让用户看到标题输入框
       window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return false;
     }
     if (!content || content.trim().length === 0) {
       alert("文章内容不能为空");
       window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+      return false;
     }
+    return true;
+  }
 
-    // 合并编辑内容和发布设置，组成完整文章对象
-    const fullArticle = {
-      title,
-      content,
-      ...settingsData,
-    };
+  async function handlePublish() {
+    if (publishing || savingDraft) return;
+    if (!validatePublish()) return;
 
-    // 调用父页面传入的提交函数（发布页走 POST，编辑页走 PUT）
-    await onSubmit(fullArticle);
+    setPublishing(true);
+    try {
+      const settingsData = settingsRef.current?.getSettings() || {};
+      await onSubmit(getFullArticle(settingsData, "published"));
+    } finally {
+      setPublishing(false);
+    }
+  }
+
+  async function handleSaveDraft() {
+    if (publishing || savingDraft) return;
+
+    setSavingDraft(true);
+    try {
+      const settingsData = settingsRef.current?.getSettings() || {};
+      await onSaveDraft(getFullArticle(settingsData, "draft"));
+    } finally {
+      setSavingDraft(false);
+    }
   }
 
   return (
     <div className="article-form-page">
-      {/* ===== 第一区块：编辑内容（图二） ===== */}
-      <section className="article-form-section">
-        <h2 className="article-form-section-title">编辑内容</h2>
+      <div className="write-editor-card">
         <ArticleEditor
           title={title}
           content={content}
           onTitleChange={setTitle}
           onContentChange={setContent}
-          embedded={true}
+          embedded
+          showToolbar
         />
-      </section>
+      </div>
 
-      {/* ===== 第二区块：发布设置（图三） ===== */}
-      <section className="article-form-section">
-        <h2 className="article-form-section-title">
-          {isEditing ? "编辑设置" : "发布设置"}
-        </h2>
+      <div
+        className={`write-settings-panel${settingsOpen ? " is-open" : ""}`}
+        id="write-settings-panel"
+      >
         <ArticleSettings
+          ref={settingsRef}
           content={content}
           initialSettings={{
             summary: initialData.summary,
@@ -91,11 +104,61 @@ export default function ArticleForm({
             articleType: initialData.articleType,
             visibility: initialData.visibility,
           }}
-          onPublish={handlePublish}
           isEditing={isEditing}
-          embedded={true}
+          embedded
+          hideActions
         />
-      </section>
+      </div>
+
+      <div className="write-action-bar">
+        <div className="write-action-bar-inner">
+          <div className="write-action-left">
+            <span className="write-word-count">共 {wordCount} 字</span>
+            {isDraft && (
+              <span className="write-draft-badge">草稿</span>
+            )}
+            <button
+              type="button"
+              className={`write-settings-toggle${
+                settingsOpen ? " is-open" : ""
+              }`}
+              onClick={() => setSettingsOpen((open) => !open)}
+              aria-expanded={settingsOpen}
+              aria-controls="write-settings-panel"
+            >
+              发文设置
+              <span className="write-settings-arrow" aria-hidden="true">
+                ▼
+              </span>
+            </button>
+          </div>
+
+          <div className="write-action-right">
+            <button
+              type="button"
+              className="write-btn write-btn-secondary"
+              onClick={handleSaveDraft}
+              disabled={savingDraft || publishing}
+            >
+              {savingDraft ? "保存中..." : "保存草稿"}
+            </button>
+            <button
+              type="button"
+              className="write-btn write-btn-primary"
+              onClick={handlePublish}
+              disabled={publishing || savingDraft}
+            >
+              {publishing
+                ? isEditing
+                  ? "发布中..."
+                  : "发布中..."
+                : isEditing && initialData.status === "published"
+                ? "保存并发布"
+                : "发布博客"}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

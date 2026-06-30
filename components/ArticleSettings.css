@@ -240,6 +240,12 @@
   border-color: #fc5531;
 }
 
+.settings-container.embedded {
+  margin-top: 0;
+  border-radius: 8px;
+  padding: 24px 32px;
+}
+
 /* 底部操作按钮区域 */
 .settings-actions {
   display: flex;

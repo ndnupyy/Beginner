@@ -1,32 +1,24 @@
 "use client";
-// 客户端组件：包含表单交互和状态管理
-
 // ============================================================
-// 文件作用：文章发布设置表单（对应图三）
-// 功能对应：标签、封面、摘要、分类、文章类型、可见范围等设置
-// 如果发布设置项出问题 / 发布按钮无效，修改这个文件
+// 文件作用：文章发布设置表单（标签、封面、摘要等）
+// 功能对应：写文章 / 编辑页「发文设置」折叠面板
+// 维护指引：通过 ref.getSettings() 读取表单值
 // ============================================================
 
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import "./ArticleSettings.css";
 
-/**
- * ArticleSettings 组件 - 文章发布设置（图三）
- * @param {Object} props
- *   props.content          - 文章正文（用于自动提取摘要）
- *   props.initialSettings  - 初始设置（编辑模式时传入已有设置）
- *   props.onPublish        - 点击"发布"时的回调，传递设置项数据
- *   props.isEditing        - 是否为编辑模式
- *   props.embedded         - 是否为嵌入模式（单页表单，不显示"返回"按钮）
- */
-export default function ArticleSettings({
-  content = "",
-  initialSettings = {},
-  onPublish,
-  isEditing = false,
-  embedded = false,
-}) {
-  // ===== 各项设置的状态 =====
+const ArticleSettings = forwardRef(function ArticleSettings(
+  {
+    content = "",
+    initialSettings = {},
+    onPublish,
+    isEditing = false,
+    embedded = false,
+    hideActions = false,
+  },
+  ref
+) {
   const [tags, setTags] = useState(initialSettings.tags || []);
   const [isAddingTag, setIsAddingTag] = useState(false);
   const [newTag, setNewTag] = useState("");
@@ -46,6 +38,19 @@ export default function ArticleSettings({
   const [isPublishing, setIsPublishing] = useState(false);
 
   const MAX_SUMMARY_LENGTH = 256;
+
+  useImperativeHandle(ref, () => ({
+    getSettings() {
+      return {
+        summary,
+        tags,
+        thumbnailUrl,
+        category,
+        articleType,
+        visibility,
+      };
+    },
+  }));
 
   function handleAddTag() {
     const trimmed = newTag.trim();
@@ -75,22 +80,18 @@ export default function ArticleSettings({
     setSummary(autoSummary);
   }
 
-  async function handlePublish() {
-    if (isPublishing) return;
+  async function handlePublishClick() {
+    if (isPublishing || !onPublish) return;
     setIsPublishing(true);
-
-    // 只传递设置项数据，标题和正文由 ArticleForm 合并
-    const settingsData = {
-      summary,
-      tags,
-      thumbnailUrl,
-      category,
-      articleType,
-      visibility,
-    };
-
     try {
-      await onPublish(settingsData);
+      await onPublish({
+        summary,
+        tags,
+        thumbnailUrl,
+        category,
+        articleType,
+        visibility,
+      });
     } finally {
       setIsPublishing(false);
     }
@@ -98,14 +99,12 @@ export default function ArticleSettings({
 
   return (
     <div className={`settings-container${embedded ? " embedded" : ""}`}>
-      {/* 独立使用时才显示内部标题（嵌入模式由 ArticleForm 显示区块标题） */}
       {!embedded && (
         <h2 className="settings-title">
           {isEditing ? "编辑文章设置" : "发布文章设置"}
         </h2>
       )}
 
-      {/* ===== 文章标签 ===== */}
       <div className="settings-row">
         <label className="settings-label">文章标签</label>
         <div className="settings-field">
@@ -124,6 +123,7 @@ export default function ArticleSettings({
             />
           ) : (
             <button
+              type="button"
               className="settings-add-btn"
               onClick={() => setIsAddingTag(true)}
             >
@@ -136,6 +136,7 @@ export default function ArticleSettings({
                 <span key={tag} className="settings-tag">
                   {tag}
                   <button
+                    type="button"
                     className="settings-tag-remove"
                     onClick={() => handleRemoveTag(tag)}
                   >
@@ -148,7 +149,6 @@ export default function ArticleSettings({
         </div>
       </div>
 
-      {/* ===== 添加封面 ===== */}
       <div className="settings-row">
         <label className="settings-label">添加封面</label>
         <div className="settings-field">
@@ -174,7 +174,6 @@ export default function ArticleSettings({
         </div>
       </div>
 
-      {/* ===== 文章摘要 ===== */}
       <div className="settings-row">
         <label className="settings-label">文章摘要</label>
         <div className="settings-field">
@@ -189,6 +188,7 @@ export default function ArticleSettings({
             {summary.length} / {MAX_SUMMARY_LENGTH}
           </div>
           <button
+            type="button"
             className="settings-add-btn"
             onClick={handleAutoSummary}
             style={{ marginTop: "8px" }}
@@ -198,7 +198,6 @@ export default function ArticleSettings({
         </div>
       </div>
 
-      {/* ===== 分类专栏 ===== */}
       <div className="settings-row">
         <label className="settings-label">分类专栏</label>
         <div className="settings-field">
@@ -211,7 +210,6 @@ export default function ArticleSettings({
         </div>
       </div>
 
-      {/* ===== 文章类型（单选） ===== */}
       <div className="settings-row">
         <label className="settings-label">文章类型</label>
         <div className="settings-field">
@@ -232,7 +230,6 @@ export default function ArticleSettings({
         </div>
       </div>
 
-      {/* ===== 可见范围（单选） ===== */}
       <div className="settings-row">
         <label className="settings-label">可见范围</label>
         <div className="settings-field">
@@ -253,20 +250,24 @@ export default function ArticleSettings({
         </div>
       </div>
 
-      {/* ===== 底部发布按钮 ===== */}
-      <div className={`settings-actions${embedded ? " single-page" : ""}`}>
-        <button
-          className="settings-btn-publish"
-          onClick={handlePublish}
-          disabled={isPublishing}
-        >
-          {isPublishing
-            ? "发布中..."
-            : isEditing
-            ? "保存修改"
-            : "发布文章"}
-        </button>
-      </div>
+      {!hideActions && (
+        <div className={`settings-actions${embedded ? " single-page" : ""}`}>
+          <button
+            type="button"
+            className="settings-btn-publish"
+            onClick={handlePublishClick}
+            disabled={isPublishing}
+          >
+            {isPublishing
+              ? "发布中..."
+              : isEditing
+              ? "保存修改"
+              : "发布文章"}
+          </button>
+        </div>
+      )}
     </div>
   );
-}
+});
+
+export default ArticleSettings;

@@ -7,6 +7,11 @@
 .site-layout {
   display: flex;
   min-height: 100vh;
+  --sidebar-width: 72px;
+}
+
+.site-layout--article {
+  --sidebar-width: 260px;
 }
 
 .site-main {
@@ -14,4 +19,9 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* 文章详情页底部操作栏占位，避免内容被遮挡 */
+.site-layout--article .page-container {
+  padding-bottom: 72px;
 }

@@ -1,43 +1,142 @@
 /* ============================================================
-   文件作用：写文章/编辑文章的单页表单布局样式
-   功能对应：编辑内容和发布设置在同一页面，通过滚动切换
-   如果两个区块之间的间距/分隔线不对，修改这个文件
+   文件作用：写文章 / 编辑文章页面布局（CSDN 宽版）
+   功能对应：ArticleForm.js
    ============================================================ */
 
-/* 单页表单外层容器 */
 .article-form-page {
-  /* 去掉 page-container 默认的底部限制，让页面自然变长可滚动 */
-  padding-bottom: 40px;
+  padding-bottom: 80px;
 }
 
-/* 每个区块（编辑内容 / 发布设置） */
-.article-form-section {
-  /* 区块之间的间距 */
-  margin-bottom: 24px;
+.write-editor-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 }
 
-/* 区块标题（"编辑内容"、"发布设置"） */
-.article-form-section-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  /* 标题左侧橙色竖线装饰 */
-  padding-left: 12px;
-  border-left: 3px solid #fc5531;
-  margin-bottom: 16px;
+.write-settings-panel {
+  display: none;
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-/* 嵌入模式下，编辑器容器去掉过大的最小高度 */
-.editor-container.embedded {
-  min-height: auto;
+.write-settings-panel.is-open {
+  display: block;
 }
 
-/* 嵌入模式下，设置表单去掉顶部重复的标题样式间距 */
-.settings-container.embedded {
-  margin-top: 0;
+.write-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: var(--sidebar-width, 72px);
+  right: 0;
+  z-index: 80;
+  background: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
 }
 
-/* 嵌入模式下，发布按钮区域靠右对齐（没有"返回"按钮了） */
-.settings-actions.single-page {
-  justify-content: flex-end;
+.write-action-bar-inner {
+  max-width: min(1200px, calc(100vw - var(--sidebar-width, 72px) - 48px));
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.write-action-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.write-word-count {
+  font-size: 13px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.write-draft-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #fff7e6;
+  color: #d48806;
+  font-size: 12px;
+}
+
+.write-settings-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.write-settings-toggle:hover,
+.write-settings-toggle.is-open {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.write-settings-arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+
+.write-settings-toggle.is-open .write-settings-arrow {
+  transform: rotate(180deg);
+}
+
+.write-action-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.write-btn {
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.write-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.write-btn-secondary {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #666;
+}
+
+.write-btn-secondary:hover:not(:disabled) {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.write-btn-primary {
+  border: none;
+  background: #fc5531;
+  color: #fff;
+  padding: 8px 28px;
+}
+
+.write-btn-primary:hover:not(:disabled) {
+  background: #e04a2a;
 }

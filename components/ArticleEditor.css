@@ -1,141 +1,121 @@
 /* ============================================================
-   文件作用：文章编辑器样式（对应图二）
-   功能对应：发布/编辑文章时的标题输入和内容编辑区域
-   如果编辑器布局/输入框样式出问题，修改这个文件
+   文件作用：文章编辑器样式（CSDN 宽版）
+   功能对应：ArticleEditor.js
    ============================================================ */
 
-/* 编辑器外层容器：白色卡片 */
 .editor-container {
-  /* 白色背景 */
   background: #fff;
-  /* 圆角 */
-  border-radius: 8px;
-  /* 内边距 */
-  padding: 30px 40px;
-  /* 最小高度 500px */
-  min-height: 500px;
+  padding: 0;
+  min-height: calc(100vh - 180px);
 }
 
-/* 标题输入区域 */
-.editor-title-row {
-  /* Flex 布局：标题输入框和字数提示在同一行 */
+.editor-container.embedded {
+  min-height: calc(100vh - 180px);
+}
+
+.editor-toolbar {
   display: flex;
   align-items: center;
-  /* 底部边框：标题和内容的分隔线 */
-  border-bottom: 1px solid #eee;
-  /* 内边距 */
-  padding-bottom: 16px;
-  /* 与内容区的间距 */
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
 }
 
-/* 标题输入框 */
-.editor-title-input {
-  /* 占据剩余空间 */
-  flex: 1;
-  /* 去掉默认边框 */
+.editor-toolbar-btn {
+  width: 32px;
+  height: 32px;
   border: none;
-  /* 去掉聚焦时的轮廓线 */
-  outline: none;
-  /* 字体大小 24px，类似标题大小 */
-  font-size: 24px;
-  /* 字体粗细 */
-  font-weight: 500;
-  /* 文字颜色 */
+  border-radius: 4px;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.editor-toolbar-btn:hover {
+  background: #eee;
   color: #333;
-  /* 背景透明 */
+}
+
+.editor-title-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 20px 24px 16px;
+  margin-bottom: 0;
+}
+
+.editor-title-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 26px;
+  font-weight: 500;
+  color: #333;
   background: transparent;
 }
 
-/* 标题输入框的占位文字样式 */
 .editor-title-input::placeholder {
   color: #ccc;
   font-weight: 400;
 }
 
-/* 标题字数提示（"还需输入 X 个字"） */
 .editor-title-hint {
-  /* 字体大小 13px */
   font-size: 13px;
-  /* 灰色 */
-  color: #999;
-  /* 不允许缩小 */
+  color: #bbb;
   flex-shrink: 0;
-  /* 与输入框的间距 */
   margin-left: 16px;
 }
 
-/* 字数提示：满足要求时变绿色 */
 .editor-title-hint.valid {
   color: #52c41a;
 }
 
-/* 字数提示：不满足要求时变橙色 */
 .editor-title-hint.invalid {
   color: #faad14;
 }
 
-/* 内容编辑区（大文本框） */
 .editor-content-textarea {
-  /* 宽度 100% 填满容器 */
   width: 100%;
-  /* 最小高度 400px */
-  min-height: 400px;
-  /* 去掉边框 */
+  min-height: calc(100vh - 280px);
+  padding: 24px;
   border: none;
-  /* 去掉聚焦轮廓 */
   outline: none;
-  /* 字体大小 16px */
   font-size: 16px;
-  /* 行高 */
-  line-height: 1.8;
-  /* 文字颜色 */
+  line-height: 1.9;
   color: #333;
-  /* 背景透明 */
   background: transparent;
-  /* 不允许用户手动调整大小 */
   resize: none;
-  /* 继承字体 */
   font-family: inherit;
+  box-sizing: border-box;
 }
 
-/* 内容区占位文字样式 */
 .editor-content-textarea::placeholder {
   color: #ccc;
   line-height: 2;
 }
 
-/* 底部操作按钮区域 */
 .editor-actions {
-  /* 顶部边框 */
   border-top: 1px solid #eee;
-  /* 上内边距 */
   padding-top: 20px;
-  /* 上外边距 */
   margin-top: 20px;
-  /* Flex 布局：按钮靠右 */
   display: flex;
   justify-content: flex-end;
   gap: 12px;
 }
 
-/* 通用按钮样式 */
 .editor-btn {
-  /* 内边距 */
   padding: 10px 24px;
-  /* 圆角 */
   border-radius: 4px;
-  /* 字体大小 */
   font-size: 14px;
-  /* 鼠标手型 */
   cursor: pointer;
-  /* 过渡动画 */
   transition: all 0.2s;
-  /* 去掉边框 */
   border: none;
 }
 
-/* 主按钮（下一步 / 发布） */
 .editor-btn-primary {
   background: #fc5531;
   color: #fff;
@@ -145,13 +125,11 @@
   background: #e04a2a;
 }
 
-/* 主按钮禁用状态 */
 .editor-btn-primary:disabled {
   background: #ccc;
   cursor: not-allowed;
 }
 
-/* 次要按钮（取消） */
 .editor-btn-secondary {
   background: #fff;
   color: #666;

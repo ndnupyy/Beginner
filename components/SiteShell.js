@@ -29,7 +29,7 @@ export default function SiteShell({ children }) {
       )}
       <div className="site-main">
         <Header />
-        {children}
+        <main className="site-main-body">{children}</main>
       </div>
     </div>
   );

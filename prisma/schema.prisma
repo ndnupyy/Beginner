@@ -28,6 +28,7 @@ model articles {
   author_id     String?
   reactions     article_reactions[]
   favorite_items favorite_items[]
+  browse_history browse_history[]
 }
 
 model article_reactions {
@@ -76,6 +77,15 @@ model favorite_items {
   folder_id  String
   created_at String
   folder     favorite_folders @relation(fields: [folder_id], references: [id], onDelete: Cascade)
+  article    articles @relation(fields: [article_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, article_id])
+}
+
+model browse_history {
+  user_id    String
+  article_id String
+  viewed_at  String
   article    articles @relation(fields: [article_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, article_id])

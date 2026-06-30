@@ -1,0 +1,15 @@
+/* ============================================================
+   文件作用：页面主体内容容器样式
+   功能对应：components/MainPageContainer.js
+   维护指引：主体区宽度 / 最小高度 → 本文件
+   ============================================================ */
+
+.main-page-container {
+  width: 100%;
+  max-width: 960px;
+  min-height: calc(100vh - 56px);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}

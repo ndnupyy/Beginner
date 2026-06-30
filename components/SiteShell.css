@@ -19,6 +19,15 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 顶栏下方的主体滚动区（侧边栏 + Header 之外的页面功能） */
+.site-main-body {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* 文章详情页底部操作栏占位，避免内容被遮挡 */

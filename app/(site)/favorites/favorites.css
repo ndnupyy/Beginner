@@ -1,0 +1,19 @@
+/* ============================================================
+   文件作用：收藏页容器样式
+   功能对应：app/(site)/favorites/page.js
+   维护指引：对齐方式 / 内容区宽度 → 本文件
+   ============================================================ */
+
+/* 参考 CSDN：内容区铺满主栏、靠左对齐，不居中留白 */
+.favorites-page.page-container {
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 16px 16px 16px 16px;
+  box-sizing: border-box;
+}
+
+.favorites-page .page-title {
+  margin-bottom: 16px;
+  font-size: 20px;
+}

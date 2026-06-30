@@ -1,0 +1,350 @@
+/* ============================================================
+   文件作用：收藏页布局样式（参考 CSDN 收藏夹界面）
+   功能对应：components/FavoritesPanel.js
+   维护指引：
+   | 左右栏比例失调 | 本文件 grid-template-columns |
+   | 收藏夹卡片样式 | .favorites-folder-item |
+   ============================================================ */
+
+/* CSDN 比例：左侧约 20%，右侧约 80%，间距紧凑 */
+.favorites-panel {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* ===== 左侧收藏夹列表（窄栏） ===== */
+.favorites-sidebar {
+  background: #fff;
+  border-radius: 4px;
+  padding: 14px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  align-self: start;
+}
+
+.favorites-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.favorites-sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.favorites-new-btn {
+  border: none;
+  background: none;
+  color: #fc5531;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.favorites-new-btn:hover {
+  color: #e04a2a;
+}
+
+.favorites-create-form {
+  margin-bottom: 10px;
+}
+
+.favorites-create-input {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.favorites-create-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.favorites-create-cancel,
+.favorites-create-submit,
+.favorites-rename-save,
+.favorites-rename-cancel {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.favorites-create-cancel,
+.favorites-rename-cancel {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #666;
+}
+
+.favorites-create-submit,
+.favorites-rename-save {
+  background: #fc5531;
+  border: 1px solid #fc5531;
+  color: #fff;
+}
+
+.favorites-folder-list {
+  list-style: none;
+}
+
+.favorites-folder-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  background: none;
+  border-radius: 4px;
+  padding: 14px 10px;
+  min-height: 72px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.favorites-folder-item:hover {
+  background: #fafafa;
+}
+
+/* CSDN 选中态：浅蓝底 + 左侧蓝色竖线 */
+.favorites-folder-item-active {
+  background: #f0f7ff;
+  border-color: #e8f1ff;
+  border-left-color: #4d8cff;
+}
+
+.favorites-folder-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.favorites-folder-count {
+  display: block;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== 右侧文章列表（主区域，占大部分宽度） ===== */
+.favorites-content {
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px 24px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  min-height: 420px;
+}
+
+.favorites-content-header {
+  margin-bottom: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 标签筛选栏（索引文章 tags 字段） */
+.favorites-tag-nav {
+  position: relative;
+  margin: 14px 0 16px;
+}
+
+.favorites-tag-nav-scroll {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.favorites-tag-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.favorites-tag-nav-item {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #f0f0f0;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.favorites-tag-nav-item:hover:not(.favorites-tag-nav-item-active) {
+  background: #e8e8e8;
+}
+
+.favorites-tag-nav-item-active {
+  background: #222;
+  color: #fff;
+}
+
+.favorites-content-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favorites-content-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+}
+
+.favorites-rename-btn {
+  border: none;
+  background: none;
+  color: #999;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.favorites-rename-btn:hover {
+  color: #fc5531;
+}
+
+.favorites-rename-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.favorites-rename-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+.favorites-error {
+  color: #ff4d4f;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.favorites-loading {
+  color: #999;
+  font-size: 14px;
+}
+
+.favorites-article-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.favorites-article-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.favorites-article-item:hover {
+  background: #fafafa;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.favorites-article-link {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.favorites-article-link:hover .favorites-article-title {
+  color: #fc5531;
+}
+
+.favorites-article-tag {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #888;
+  padding: 2px 6px;
+  background: #f5f5f5;
+  border-radius: 2px;
+}
+
+.favorites-article-title {
+  font-size: 15px;
+  color: #222;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorites-article-star {
+  flex-shrink: 0;
+  color: #f5a623;
+  font-size: 16px;
+}
+
+.favorites-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.favorites-empty-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #fc5531;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 960px) {
+  .favorites-panel {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .favorites-sidebar {
+    width: 100%;
+  }
+
+  .favorites-content {
+    min-height: auto;
+  }
+}

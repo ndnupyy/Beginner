@@ -27,6 +27,7 @@ model articles {
   updated_at    String
   author_id     String?
   reactions     article_reactions[]
+  favorite_items favorite_items[]
 }
 
 model article_reactions {
@@ -57,4 +58,25 @@ model user_follows {
   created_at   String
 
   @@id([follower_id, following_id])
+}
+
+model favorite_folders {
+  id         String @id
+  user_id    String
+  name       String
+  is_default Int    @default(0)
+  created_at String
+  updated_at String
+  items      favorite_items[]
+}
+
+model favorite_items {
+  user_id    String
+  article_id String
+  folder_id  String
+  created_at String
+  folder     favorite_folders @relation(fields: [folder_id], references: [id], onDelete: Cascade)
+  article    articles @relation(fields: [article_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, article_id])
 }

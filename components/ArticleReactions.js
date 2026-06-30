@@ -1,15 +1,17 @@
 "use client";
 // ============================================================
 // 文件作用：文章详情页底部点赞 / 收藏操作栏（CSDN 风格）
-// 功能对应：固定底栏 toggle 点赞与收藏
+// 功能对应：固定底栏 toggle 点赞与收藏；多收藏夹时弹出选择框
 // 维护指引：
 //   - 样式 → ArticleReactions.css
+//   - 收藏夹弹窗 → components/FavoriteFolderPicker.js
 //   - API → app/api/articles/[id]/reactions/route.js
 // ============================================================
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatCount } from "@/lib/format";
+import FavoriteFolderPicker from "@/components/FavoriteFolderPicker";
 import "./ArticleReactions.css";
 
 function LikeIcon({ active }) {
@@ -49,6 +51,8 @@ export default function ArticleReactions({
   const [liked, setLiked] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [loadingType, setLoadingType] = useState("");
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerFolders, setPickerFolders] = useState([]);
 
   useEffect(() => {
     async function loadState() {
@@ -68,21 +72,37 @@ export default function ArticleReactions({
     loadState();
   }, [articleId, initialLikes, initialFavorites]);
 
+  async function submitReaction(type, folderId) {
+    const response = await fetch(`/api/articles/${articleId}/reactions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        folderId ? { type, folderId } : { type }
+      ),
+    });
+
+    const data = await response.json();
+
+    if (response.status === 409 && data.needFolderSelection) {
+      setPickerFolders(data.folders || []);
+      setPickerOpen(true);
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(data.error || "操作失败");
+    }
+
+    return data;
+  }
+
   async function handleToggle(type) {
     if (loadingType) return;
     setLoadingType(type);
 
     try {
-      const response = await fetch(`/api/articles/${articleId}/reactions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "操作失败");
-      }
+      const data = await submitReaction(type);
+      if (!data) return;
 
       setLikes(data.likes);
       setFavorites(data.favorites);
@@ -96,37 +116,66 @@ export default function ArticleReactions({
     }
   }
 
+  async function handlePickFolder(folderId) {
+    setPickerOpen(false);
+    setLoadingType("favorite");
+
+    try {
+      const data = await submitReaction("favorite", folderId);
+      if (!data) return;
+
+      setLikes(data.likes);
+      setFavorites(data.favorites);
+      setLiked(Boolean(data.liked));
+      setFavorited(Boolean(data.favorited));
+      router.refresh();
+    } catch (error) {
+      alert(error.message || "收藏失败");
+    } finally {
+      setLoadingType("");
+    }
+  }
+
   return (
-    <div className="article-action-bar" role="toolbar" aria-label="文章互动">
-      <div className="article-action-bar-inner">
-        <button
-          type="button"
-          className={`article-action-item${
-            liked ? " article-action-item-active" : ""
-          }`}
-          onClick={() => handleToggle("like")}
-          disabled={loadingType === "like"}
-          aria-pressed={liked}
-        >
-          <LikeIcon active={liked} />
-          <span>{formatCount(likes)}</span>
-        </button>
+    <>
+      <div className="article-action-bar" role="toolbar" aria-label="文章互动">
+        <div className="article-action-bar-inner">
+          <button
+            type="button"
+            className={`article-action-item${
+              liked ? " article-action-item-active" : ""
+            }`}
+            onClick={() => handleToggle("like")}
+            disabled={loadingType === "like"}
+            aria-pressed={liked}
+          >
+            <LikeIcon active={liked} />
+            <span>{formatCount(likes)}</span>
+          </button>
 
-        <span className="article-action-divider" aria-hidden="true" />
+          <span className="article-action-divider" aria-hidden="true" />
 
-        <button
-          type="button"
-          className={`article-action-item${
-            favorited ? " article-action-item-active" : ""
-          }`}
-          onClick={() => handleToggle("favorite")}
-          disabled={loadingType === "favorite"}
-          aria-pressed={favorited}
-        >
-          <FavoriteIcon active={favorited} />
-          <span>{formatCount(favorites)}</span>
-        </button>
+          <button
+            type="button"
+            className={`article-action-item${
+              favorited ? " article-action-item-active" : ""
+            }`}
+            onClick={() => handleToggle("favorite")}
+            disabled={loadingType === "favorite"}
+            aria-pressed={favorited}
+          >
+            <FavoriteIcon active={favorited} />
+            <span>{formatCount(favorites)}</span>
+          </button>
+        </div>
       </div>
-    </div>
+
+      <FavoriteFolderPicker
+        open={pickerOpen}
+        folders={pickerFolders}
+        onClose={() => setPickerOpen(false)}
+        onConfirm={handlePickFolder}
+      />
+    </>
   );
 }

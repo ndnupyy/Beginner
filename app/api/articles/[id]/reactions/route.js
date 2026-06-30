@@ -47,11 +47,18 @@ export async function POST(request, { params }) {
     });
   }
 
+  const folderId = body?.folderId || null;
+
   try {
-    const state = await toggleArticleReaction(userId, id, type);
+    const state = await toggleArticleReaction(userId, id, type, folderId);
     if (!state) {
       return NextResponse.json({ error: "文章不存在" }, { status: 404 });
     }
+
+    if (state.needFolderSelection) {
+      return NextResponse.json(state, { status: 409 });
+    }
+
     return NextResponse.json(state);
   } catch (error) {
     return NextResponse.json(

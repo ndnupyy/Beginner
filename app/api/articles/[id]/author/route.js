@@ -6,10 +6,12 @@
 
 import { NextResponse } from "next/server";
 import { getAuthorProfileForArticle } from "@/lib/authors";
+import { getSessionUserId } from "@/lib/session";
 
 export async function GET(_request, { params }) {
   const { id } = await params;
-  const profile = await getAuthorProfileForArticle(id);
+  const viewerId = await getSessionUserId();
+  const profile = await getAuthorProfileForArticle(id, viewerId);
 
   if (!profile) {
     return NextResponse.json({ error: "文章不存在" }, { status: 404 });

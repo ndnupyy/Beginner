@@ -10,11 +10,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatStatCount } from "@/lib/format";
+import FollowButton from "@/components/FollowButton";
 import "./AuthorSidebar.css";
+import "./FollowButton.css";
 
 export default function AuthorSidebar({ articleId }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fansCount, setFansCount] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -25,7 +28,10 @@ export default function AuthorSidebar({ articleId }) {
         const response = await fetch(`/api/articles/${articleId}/author`);
         if (!response.ok) return;
         const data = await response.json();
-        if (!cancelled) setProfile(data.profile);
+        if (!cancelled) {
+          setProfile(data.profile);
+          setFansCount(data.profile?.stats?.fansCount ?? 0);
+        }
       } catch {
         // 保持空态
       } finally {
@@ -110,19 +116,28 @@ export default function AuthorSidebar({ articleId }) {
             <span>收藏</span>
           </div>
           <div className="author-sidebar-stat">
-            <strong>{formatStatCount(stats.fansCount)}</strong>
+            <strong>{formatStatCount(fansCount)}</strong>
             <span>粉丝</span>
           </div>
         </div>
 
         <div className="author-sidebar-actions">
-          <button
-            type="button"
-            className="author-sidebar-btn author-sidebar-btn-primary"
-            onClick={() => alert("关注功能开发中")}
-          >
-            关注
-          </button>
+          {!profile.isSelf && profile.userId ? (
+            profile.canFollow ? (
+              <FollowButton
+                userId={profile.userId}
+                initialFollowing={profile.isFollowing}
+                initialFansCount={profile.stats.fansCount}
+                onFansCountChange={setFansCount}
+              />
+            ) : (
+              <Link href="/login" className="follow-btn follow-btn--default">
+                关注
+              </Link>
+            )
+          ) : profile.isSelf ? (
+            <span className="author-sidebar-self-hint">这是你的文章</span>
+          ) : null}
           <button
             type="button"
             className="author-sidebar-btn author-sidebar-btn-secondary"

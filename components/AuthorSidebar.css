@@ -123,6 +123,14 @@
 .author-sidebar-actions {
   display: flex;
   gap: 10px;
+  align-items: center;
+}
+
+.author-sidebar-self-hint {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
 }
 
 .author-sidebar-btn {

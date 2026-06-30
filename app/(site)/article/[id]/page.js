@@ -8,11 +8,12 @@
 // ============================================================
 
 import { toArticleBodyHtml } from "@/lib/contentFormat";
-import { getArticleById, incrementViews, ARTICLE_STATUS } from "@/lib/articles";
+import { getArticleById, ARTICLE_STATUS } from "@/lib/articles";
 import { formatViews, formatCount } from "@/lib/format";
 import { getSessionUserId } from "@/lib/session";
 import ArticleActions from "@/components/ArticleActions";
 import ArticleReactions from "@/components/ArticleReactions";
+import ArticleViewTracker from "@/components/ArticleViewTracker";
 import { notFound } from "next/navigation";
 
 export default async function ArticleDetailPage({ params }) {
@@ -30,12 +31,7 @@ export default async function ArticleDetailPage({ params }) {
     }
   }
 
-  if (article.status === ARTICLE_STATUS.published) {
-    await incrementViews(id);
-  }
-  const updatedArticle = await getArticleById(id);
-
-  const formattedDate = new Date(updatedArticle.createdAt).toLocaleString(
+  const formattedDate = new Date(article.createdAt).toLocaleString(
     "zh-CN",
     {
       year: "numeric",
@@ -48,27 +44,28 @@ export default async function ArticleDetailPage({ params }) {
 
   return (
     <>
+      <ArticleViewTracker articleId={id} />
       <div className="page-container page-container--article">
         <article className="article-detail">
-          <h1 className="article-detail-title">{updatedArticle.title}</h1>
+          <h1 className="article-detail-title">{article.title}</h1>
 
           <div className="article-detail-meta">
             <span className="article-detail-type-tag">
-              {updatedArticle.articleType}
+              {article.articleType}
             </span>
             <span>{formattedDate}</span>
-            <span>👁 {formatViews(updatedArticle.views)} 阅读</span>
-            <span>👍 {formatCount(updatedArticle.likes)} 点赞</span>
-            <span>⭐ {formatCount(updatedArticle.favorites)} 收藏</span>
-            {updatedArticle.category && (
-              <span>📁 {updatedArticle.category}</span>
+            <span>👁 {formatViews(article.views)} 阅读</span>
+            <span>👍 {formatCount(article.likes)} 点赞</span>
+            <span>⭐ {formatCount(article.favorites)} 收藏</span>
+            {article.category && (
+              <span>📁 {article.category}</span>
             )}
           </div>
 
-          {updatedArticle.tags && updatedArticle.tags.length > 0 && (
+          {article.tags && article.tags.length > 0 && (
             <div className="article-detail-tags">
               <span className="article-detail-tags-label">标签</span>
-              {updatedArticle.tags.map((tag) => (
+              {article.tags.map((tag) => (
                 <span key={tag} className="article-detail-tag">
                   {tag}
                 </span>
@@ -79,7 +76,7 @@ export default async function ArticleDetailPage({ params }) {
           <div
             className="article-detail-content"
             dangerouslySetInnerHTML={{
-              __html: toArticleBodyHtml(updatedArticle.content),
+              __html: toArticleBodyHtml(article.content),
             }}
           />
 
@@ -89,8 +86,8 @@ export default async function ArticleDetailPage({ params }) {
 
       <ArticleReactions
         articleId={id}
-        initialLikes={updatedArticle.likes}
-        initialFavorites={updatedArticle.favorites}
+        initialLikes={article.likes}
+        initialFavorites={article.favorites}
       />
     </>
   );

@@ -1,0 +1,79 @@
+/* ============================================================
+   文件作用：作者推荐侧栏样式
+   功能对应：components/RecommendedAuthors.js
+   ============================================================ */
+
+.recommended-authors {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  height: fit-content;
+  position: sticky;
+  top: 76px;
+  flex: 0 0 300px;
+  width: 300px;
+}
+
+.recommended-authors-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.recommended-authors-empty {
+  color: #999;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.recommended-authors-list {
+  list-style: none;
+}
+
+.recommended-authors-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.recommended-authors-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.recommended-authors-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.recommended-authors-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.recommended-authors-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recommended-authors-tagline {
+  font-size: 12px;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

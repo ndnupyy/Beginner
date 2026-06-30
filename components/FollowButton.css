@@ -1,0 +1,59 @@
+/* ============================================================
+   文件作用：关注按钮样式
+   功能对应：components/FollowButton.js
+   ============================================================ */
+
+.follow-btn {
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.follow-btn--default {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: #fc5531;
+  color: #fff;
+}
+
+.follow-btn--default:hover:not(:disabled) {
+  background: #e04a2a;
+}
+
+.follow-btn--default.is-following {
+  background: #fff;
+  border: 1px solid #fc5531;
+  color: #fc5531;
+}
+
+.follow-btn--compact {
+  flex-shrink: 0;
+  padding: 4px 14px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+}
+
+.follow-btn--compact:hover:not(:disabled) {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.follow-btn--compact.is-following {
+  border-color: #fc5531;
+  color: #fc5531;
+  background: #fff7f4;
+}
+
+.follow-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

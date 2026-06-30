@@ -50,3 +50,11 @@ model users {
   created_at          String
   updated_at          String
 }
+
+model user_follows {
+  follower_id  String
+  following_id String
+  created_at   String
+
+  @@id([follower_id, following_id])
+}

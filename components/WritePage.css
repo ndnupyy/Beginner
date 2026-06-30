@@ -11,8 +11,16 @@
 }
 
 .write-page-inner {
-  max-width: min(1200px, calc(100vw - var(--sidebar-width, 72px) - 48px));
+  max-width: min(1400px, calc(100vw - var(--sidebar-width, 72px) - 48px));
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 16px;
+  align-items: start;
+}
+
+.write-page-main {
+  min-width: 0;
 }
 
 .write-page-header {
@@ -37,4 +45,10 @@
 
 .write-page-back:hover {
   color: #fc5531;
+}
+
+@media (max-width: 1100px) {
+  .write-page-inner {
+    grid-template-columns: 1fr;
+  }
 }

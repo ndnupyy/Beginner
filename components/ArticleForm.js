@@ -20,7 +20,6 @@ export default function ArticleForm({
   const settingsRef = useRef(null);
   const [title, setTitle] = useState(initialData.title || "");
   const [content, setContent] = useState(initialData.content || "");
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [savingDraft, setSavingDraft] = useState(false);
   const [publishing, setPublishing] = useState(false);
 
@@ -99,10 +98,7 @@ export default function ArticleForm({
         />
       </div>
 
-      <div
-        className={`write-settings-panel${settingsOpen ? " is-open" : ""}`}
-        id="write-settings-panel"
-      >
+      <div className="write-settings-panel" id="write-settings-panel">
         <ArticleSettings
           ref={settingsRef}
           content={content}
@@ -127,20 +123,6 @@ export default function ArticleForm({
             {isDraft && (
               <span className="write-draft-badge">草稿</span>
             )}
-            <button
-              type="button"
-              className={`write-settings-toggle${
-                settingsOpen ? " is-open" : ""
-              }`}
-              onClick={() => setSettingsOpen((open) => !open)}
-              aria-expanded={settingsOpen}
-              aria-controls="write-settings-panel"
-            >
-              发文设置
-              <span className="write-settings-arrow" aria-hidden="true">
-                ▼
-              </span>
-            </button>
           </div>
 
           <div className="write-action-right">

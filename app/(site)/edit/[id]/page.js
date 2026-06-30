@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import ArticleForm from "@/components/ArticleForm";
+import WriteAiAssistant from "@/components/WriteAiAssistant";
 import "@/components/WritePage.css";
 
 export default function EditPage() {
@@ -94,21 +95,24 @@ export default function EditPage() {
   return (
     <div className="write-page">
       <div className="write-page-inner">
-        <div className="write-page-header">
-          <h1 className="write-page-title">
-            {isDraft ? "编辑草稿" : "编辑文章"}
-          </h1>
-          <Link href="/" className="write-page-back">
-            ← 返回首页
-          </Link>
+        <div className="write-page-main">
+          <div className="write-page-header">
+            <h1 className="write-page-title">
+              {isDraft ? "编辑草稿" : "编辑文章"}
+            </h1>
+            <Link href="/" className="write-page-back">
+              ← 返回首页
+            </Link>
+          </div>
+          <ArticleForm
+            initialData={existingArticle}
+            onSubmit={handleSubmit}
+            onSaveDraft={handleSaveDraft}
+            isEditing
+            isDraft={isDraft}
+          />
         </div>
-        <ArticleForm
-          initialData={existingArticle}
-          onSubmit={handleSubmit}
-          onSaveDraft={handleSaveDraft}
-          isEditing
-          isDraft={isDraft}
-        />
+        <WriteAiAssistant />
       </div>
     </div>
   );

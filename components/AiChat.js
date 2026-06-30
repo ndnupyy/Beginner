@@ -5,6 +5,7 @@
 // ============================================================
 
 import { useEffect, useRef, useState } from "react";
+import { renderMessageContent } from "@/components/aiChatRender";
 import "./AiChat.css";
 
 const WELCOME_MESSAGE = {
@@ -12,43 +13,6 @@ const WELCOME_MESSAGE = {
   content:
     "你好，我是你的代码编程大师。你可以问我任何编程相关的问题，例如 bug 排查、代码写法、架构设计、框架用法等。直接描述你的问题即可。",
 };
-
-function renderMessageContent(content) {
-  const parts = content.split(/(```[\s\S]*?```)/g);
-
-  return parts.map((part, index) => {
-    if (part.startsWith("```") && part.endsWith("```")) {
-      const inner = part.slice(3, -3);
-      const firstLineBreak = inner.indexOf("\n");
-      let language = "";
-      let code = inner;
-
-      if (firstLineBreak !== -1) {
-        const firstLine = inner.slice(0, firstLineBreak).trim();
-        if (/^[\w+#.-]+$/.test(firstLine)) {
-          language = firstLine;
-          code = inner.slice(firstLineBreak + 1);
-        }
-      }
-
-      return (
-        <pre key={index} className="ai-chat-code">
-          {language ? (
-            <span className="ai-chat-code-lang">{language}</span>
-          ) : null}
-          <code>{code.trim()}</code>
-        </pre>
-      );
-    }
-
-    return part.split("\n").map((line, lineIndex) => (
-      <span key={`${index}-${lineIndex}`}>
-        {lineIndex > 0 ? <br /> : null}
-        {line}
-      </span>
-    ));
-  });
-}
 
 export default function AiChat() {
   const [messages, setMessages] = useState([WELCOME_MESSAGE]);

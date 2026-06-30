@@ -35,15 +35,11 @@
 }
 
 .write-settings-panel {
-  display: none;
+  display: block;
   margin-top: 16px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-
-.write-settings-panel.is-open {
-  display: block;
 }
 
 .write-action-bar {
@@ -87,35 +83,6 @@
   background: #fff7e6;
   color: #d48806;
   font-size: 12px;
-}
-
-.write-settings-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
-  background: #fff;
-  color: #666;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.write-settings-toggle:hover,
-.write-settings-toggle.is-open {
-  border-color: #fc5531;
-  color: #fc5531;
-}
-
-.write-settings-arrow {
-  font-size: 10px;
-  transition: transform 0.2s;
-}
-
-.write-settings-toggle.is-open .write-settings-arrow {
-  transform: rotate(180deg);
 }
 
 .write-action-right {

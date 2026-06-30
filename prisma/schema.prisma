@@ -90,3 +90,23 @@ model browse_history {
 
   @@id([user_id, article_id])
 }
+
+model chat_conversations {
+  id         String          @id
+  user_a_id  String
+  user_b_id  String
+  created_at String
+  updated_at String
+  messages   chat_messages[]
+
+  @@unique([user_a_id, user_b_id])
+}
+
+model chat_messages {
+  id              String             @id
+  conversation_id String
+  sender_id       String
+  content         String
+  created_at      String
+  conversation    chat_conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+}

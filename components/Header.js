@@ -9,7 +9,7 @@
 //   - 用户信息不显示 → app/api/auth/me/route.js
 //   - 更换头像失败 → app/api/auth/upload-avatar/route.js
 //   - 退出无效 → app/api/auth/logout/route.js
-//   - Logo 回首页清搜索 → handleGoHome
+//   - 头像下拉「个人主页」→ /user/[id]
 // ============================================================
 
 import { useEffect, useRef, useState } from "react";
@@ -154,6 +154,13 @@ export default function Header() {
 
               {menuOpen && (
                 <div className="header-dropdown">
+                  <Link
+                    href={`/user/${user.id}`}
+                    className="header-dropdown-item"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    个人主页
+                  </Link>
                   <button
                     type="button"
                     className="header-dropdown-item"

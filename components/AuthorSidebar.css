@@ -126,6 +126,31 @@
   align-items: center;
 }
 
+.author-sidebar-profile-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.author-sidebar-profile-link:hover .author-sidebar-name {
+  color: #fc5531;
+}
+
+.author-sidebar-self-link {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  color: #fc5531;
+  text-decoration: none;
+  padding: 8px 0;
+  border: 1px solid #fc5531;
+  border-radius: 20px;
+}
+
+.author-sidebar-self-link:hover {
+  background: #fff1ee;
+}
+
 .author-sidebar-self-hint {
   flex: 1;
   text-align: center;

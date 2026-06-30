@@ -75,12 +75,25 @@ export default function AuthorSidebar({ articleId }) {
         </Link>
 
         <div className="author-sidebar-header">
-          <img
-            src={profile.avatarUrl || "/default-avatar.svg"}
-            alt={profile.username}
-            className="author-sidebar-avatar"
-          />
-          <div className="author-sidebar-name">{profile.username}</div>
+          {profile.userId ? (
+            <Link href={`/user/${profile.userId}`} className="author-sidebar-profile-link">
+              <img
+                src={profile.avatarUrl || "/default-avatar.svg"}
+                alt={profile.username}
+                className="author-sidebar-avatar"
+              />
+              <div className="author-sidebar-name">{profile.username}</div>
+            </Link>
+          ) : (
+            <>
+              <img
+                src={profile.avatarUrl || "/default-avatar.svg"}
+                alt={profile.username}
+                className="author-sidebar-avatar"
+              />
+              <div className="author-sidebar-name">{profile.username}</div>
+            </>
+          )}
           <div className="author-sidebar-badges">
             <span className="author-sidebar-badge">
               博客等级 Lv.{profile.blogLevel}
@@ -136,7 +149,9 @@ export default function AuthorSidebar({ articleId }) {
               </Link>
             )
           ) : profile.isSelf ? (
-            <span className="author-sidebar-self-hint">这是你的文章</span>
+            <Link href={`/user/${profile.userId}`} className="author-sidebar-self-link">
+              个人主页
+            </Link>
           ) : null}
           <button
             type="button"

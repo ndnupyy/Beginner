@@ -125,6 +125,8 @@
   text-align: left;
   cursor: pointer;
   transition: background 0.2s;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .header-dropdown-item:hover {

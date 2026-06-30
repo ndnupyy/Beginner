@@ -13,3 +13,8 @@
   padding: 20px;
   box-sizing: border-box;
 }
+
+/* 个人主页等宽版内容区 */
+.main-page-container.main-page-container--wide {
+  max-width: 1200px;
+}

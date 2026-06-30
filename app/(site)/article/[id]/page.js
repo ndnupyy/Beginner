@@ -11,7 +11,6 @@ import { toArticleBodyHtml } from "@/lib/contentFormat";
 import { getArticleById, ARTICLE_STATUS } from "@/lib/articles";
 import { formatViews, formatCount } from "@/lib/format";
 import { getSessionUserId } from "@/lib/session";
-import ArticleActions from "@/components/ArticleActions";
 import ArticleReactions from "@/components/ArticleReactions";
 import ArticleViewTracker from "@/components/ArticleViewTracker";
 import { notFound } from "next/navigation";
@@ -80,7 +79,6 @@ export default async function ArticleDetailPage({ params }) {
             }}
           />
 
-          <ArticleActions articleId={id} />
         </article>
       </div>
 

@@ -47,7 +47,8 @@ export default function EditPage() {
     });
 
     if (response.ok) {
-      router.push(`/article/${articleId}`);
+      const authorId = existingArticle?.authorId;
+      router.push(authorId ? `/user/${authorId}` : "/");
       router.refresh();
     } else {
       const error = await response.json();

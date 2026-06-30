@@ -5,6 +5,7 @@
 // ============================================================
 
 import { useMemo, useRef, useState } from "react";
+import { getContentPlainText, getContentTextLength } from "@/lib/contentFormat";
 import ArticleEditor from "@/components/ArticleEditor";
 import ArticleSettings from "@/components/ArticleSettings";
 import "./ArticleForm.css";
@@ -24,7 +25,7 @@ export default function ArticleForm({
   const [publishing, setPublishing] = useState(false);
 
   const wordCount = useMemo(
-    () => (title?.length || 0) + (content?.length || 0),
+    () => (title?.length || 0) + getContentTextLength(content),
     [title, content]
   );
 
@@ -43,7 +44,7 @@ export default function ArticleForm({
       window.scrollTo({ top: 0, behavior: "smooth" });
       return false;
     }
-    if (!content || content.trim().length === 0) {
+    if (!getContentPlainText(content)) {
       alert("文章内容不能为空");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return false;
@@ -79,13 +80,22 @@ export default function ArticleForm({
   return (
     <div className="article-form-page">
       <div className="write-editor-card">
+        <div className="write-title-row">
+          <input
+            type="text"
+            className="write-title-input"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            maxLength={100}
+            placeholder="请输入文章标题（5 ~ 100 个字）"
+          />
+        </div>
         <ArticleEditor
-          title={title}
           content={content}
-          onTitleChange={setTitle}
           onContentChange={setContent}
           embedded
           showToolbar
+          hideTitle
         />
       </div>
 

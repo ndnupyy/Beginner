@@ -1,0 +1,144 @@
+/* ============================================================
+   文件作用：插入代码弹窗样式
+   功能对应：CodeInsertModal.js
+   ============================================================ */
+
+.code-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.code-modal {
+  position: relative;
+  width: min(760px, 100%);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.code-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #999;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.code-modal-close:hover {
+  color: #333;
+  background: #f5f5f5;
+}
+
+.code-modal-body {
+  padding: 20px 20px 0;
+}
+
+.code-modal-editor-wrap {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #3a3f4b;
+}
+
+.code-modal-language {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  min-width: 140px;
+  max-width: 180px;
+  padding: 6px 28px 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #e6e6e6;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ccc 50%),
+    linear-gradient(135deg, #ccc 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(50% - 2px),
+    calc(100% - 9px) calc(50% - 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.code-modal-language option {
+  color: #333;
+  background: #fff;
+}
+
+.code-modal-textarea {
+  display: block;
+  width: 100%;
+  min-height: 280px;
+  padding: 48px 16px 16px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: #3a3f4b;
+  color: #d4d4d4;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.code-modal-textarea::placeholder {
+  color: #888;
+}
+
+.code-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px 20px;
+}
+
+.code-modal-btn {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 20px;
+  border-radius: 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.code-modal-btn-cancel {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #666;
+}
+
+.code-modal-btn-cancel:hover {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.code-modal-btn-confirm {
+  border: none;
+  background: #fc5531;
+  color: #fff;
+}
+
+.code-modal-btn-confirm:hover {
+  background: #e04a2a;
+}

@@ -14,6 +14,26 @@
   overflow: hidden;
 }
 
+.write-title-row {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 20px 24px 16px;
+}
+
+.write-title-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 26px;
+  font-weight: 500;
+  color: #333;
+  background: transparent;
+}
+
+.write-title-input::placeholder {
+  color: #ccc;
+  font-weight: 400;
+}
+
 .write-settings-panel {
   display: none;
   margin-top: 16px;

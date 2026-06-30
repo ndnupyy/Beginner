@@ -1,0 +1,55 @@
+/* ============================================================
+   文件作用：代码块右键菜单样式
+   功能对应：CodeBlockContextMenu.js
+   ============================================================ */
+
+.code-block-context-menu {
+  position: fixed;
+  z-index: 300;
+  min-width: 180px;
+  padding: 6px 0;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.code-block-context-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 16px;
+  border: none;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.code-block-context-item:hover {
+  background: #f5f6f7;
+}
+
+.code-block-context-item.is-danger {
+  color: #fc5531;
+}
+
+.code-block-context-item.is-danger:hover {
+  background: #fff1ee;
+}
+
+.code-block-context-shortcut {
+  margin-left: 24px;
+  color: #999;
+  font-size: 12px;
+}
+
+.code-block-context-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: #f0f0f0;
+}

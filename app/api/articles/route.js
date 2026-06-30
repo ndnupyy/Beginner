@@ -11,6 +11,7 @@ import {
 } from "@/lib/articles";
 import { getSessionUserId } from "@/lib/session";
 import { getUserById } from "@/lib/users";
+import { getContentPlainText } from "@/lib/contentFormat";
 import { NextResponse } from "next/server";
 
 function isDraft(body) {
@@ -21,7 +22,7 @@ function validatePublished(body) {
   if (!body.title || body.title.length < 5) {
     return "标题至少需要 5 个字";
   }
-  if (!body.content || body.content.trim().length === 0) {
+  if (!getContentPlainText(body.content)) {
     return "文章内容不能为空";
   }
   return null;

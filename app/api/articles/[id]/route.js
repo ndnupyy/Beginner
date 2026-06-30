@@ -11,6 +11,7 @@ import {
   ARTICLE_STATUS,
 } from "@/lib/articles";
 import { getSessionUserId } from "@/lib/session";
+import { getContentPlainText } from "@/lib/contentFormat";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
@@ -75,7 +76,7 @@ export async function PUT(request, { params }) {
           { status: 400 }
         );
       }
-      if (!mergedContent || mergedContent.trim().length === 0) {
+      if (!getContentPlainText(mergedContent)) {
         return NextResponse.json(
           { error: "文章内容不能为空" },
           { status: 400 }

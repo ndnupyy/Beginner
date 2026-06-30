@@ -157,14 +157,134 @@ body {
   color: #666;
 }
 
-/* 详情页正文内容 */
+/* 详情页正文内容（TipTap HTML / 旧纯文本兼容） */
 .article-detail-content {
   font-size: 16px;
   line-height: 2;
   color: #333;
-  /* 保留换行符（white-space: pre-wrap 让 \n 显示为换行） */
+  word-break: break-word;
+}
+
+.article-detail-content p {
+  margin: 0.75em 0;
+}
+
+.article-detail-content ul,
+.article-detail-content ol {
+  padding-left: 1.5em;
+  margin: 0.75em 0;
+}
+
+.article-detail-content li {
+  margin: 0.25em 0;
+}
+
+.article-detail-content strong {
+  font-weight: 600;
+}
+
+.article-detail-content pre {
+  margin: 0.75em 0;
+  padding: 16px;
+  border-radius: 6px;
+  background: #3a3f4b;
+  color: #d4d4d4;
+  overflow-x: auto;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.article-detail-content pre code {
+  display: block;
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.article-detail-content li pre {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.article-detail-content a {
+  color: #fc5531;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.article-detail-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.75em auto;
+  border-radius: 4px;
+}
+
+.article-detail-content img[width] {
+  max-width: 100%;
+}
+
+.article-detail-content div.article-table-caption,
+.article-detail-content .article-table-caption {
+  display: block;
+  margin: 0 0 10px;
+  padding: 0;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.article-detail-content table {
+  border-collapse: collapse;
+  max-width: 100%;
+  margin: 0.75em auto;
+  background: #fff;
+}
+
+.article-detail-content table[data-table-align="left"] {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.article-detail-content table[data-table-align="right"] {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.article-detail-content table caption {
+  caption-side: top;
+  padding: 0 0 10px;
+  color: #333;
+  font-size: 14px;
+  text-align: center !important;
+  width: 100%;
+}
+
+.article-detail-content table td,
+.article-detail-content table th {
+  border: 1px solid #e8e8e8;
+  padding: 8px 12px;
+  min-width: 60px;
+  vertical-align: top;
+}
+
+.article-detail-content table th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.article-detail-content table tbody tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.article-detail-content table tbody tr:nth-child(even) th {
+  background: #f3f3f3;
 }
 
 /* 详情页底部操作栏（编辑、删除按钮） */

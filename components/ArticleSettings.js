@@ -6,6 +6,7 @@
 // ============================================================
 
 import { forwardRef, useImperativeHandle, useState } from "react";
+import { getContentPlainText } from "@/lib/contentFormat";
 import "./ArticleSettings.css";
 
 const ArticleSettings = forwardRef(function ArticleSettings(
@@ -76,7 +77,7 @@ const ArticleSettings = forwardRef(function ArticleSettings(
   }
 
   function handleAutoSummary() {
-    const autoSummary = content.replace(/\n/g, " ").slice(0, 100);
+    const autoSummary = getContentPlainText(content).replace(/\n/g, " ").slice(0, 100);
     setSummary(autoSummary);
   }
 

@@ -7,6 +7,7 @@
 //   - 点赞收藏 → components/ArticleReactions.js
 // ============================================================
 
+import { toArticleBodyHtml } from "@/lib/contentFormat";
 import { getArticleById, incrementViews, ARTICLE_STATUS } from "@/lib/articles";
 import { formatViews, formatCount } from "@/lib/format";
 import { getSessionUserId } from "@/lib/session";
@@ -75,9 +76,12 @@ export default async function ArticleDetailPage({ params }) {
             </div>
           )}
 
-          <div className="article-detail-content">
-            {updatedArticle.content}
-          </div>
+          <div
+            className="article-detail-content"
+            dangerouslySetInnerHTML={{
+              __html: toArticleBodyHtml(updatedArticle.content),
+            }}
+          />
 
           <ArticleActions articleId={id} />
         </article>

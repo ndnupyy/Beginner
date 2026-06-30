@@ -1,0 +1,145 @@
+/* ============================================================
+   文件作用：插入表格弹窗样式
+   功能对应：TableInsertModal.js
+   ============================================================ */
+
+.table-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.table-modal {
+  width: min(560px, 100%);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.table-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 0;
+}
+
+.table-modal-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.table-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #999;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.table-modal-close:hover {
+  color: #333;
+  background: #f5f5f5;
+}
+
+.table-modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.table-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.table-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.table-modal-field-full {
+  grid-column: 1 / -1;
+}
+
+.table-modal-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.table-modal-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.table-modal-input:focus {
+  border-color: #fc5531;
+}
+
+.table-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+.table-modal-btn {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 20px;
+  border-radius: 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.table-modal-btn-cancel {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #666;
+}
+
+.table-modal-btn-cancel:hover {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.table-modal-btn-confirm {
+  border: none;
+  background: #fc5531;
+  color: #fff;
+}
+
+.table-modal-btn-confirm:hover {
+  background: #e04a2a;
+}
+
+@media (max-width: 640px) {
+  .table-modal-grid {
+    grid-template-columns: 1fr;
+  }
+}

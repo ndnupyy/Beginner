@@ -7,12 +7,17 @@
 // ============================================================
 
 import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
+import "@/components/SiteShell.css";
 
 export default function SiteLayout({ children }) {
   return (
-    <>
-      <Header />
-      {children}
-    </>
+    <div className="site-layout">
+      <Sidebar />
+      <div className="site-main">
+        <Header />
+        {children}
+      </div>
+    </div>
   );
 }

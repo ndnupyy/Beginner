@@ -10,11 +10,14 @@
 //   - 更换头像失败 → app/api/auth/upload-avatar/route.js
 //   - 退出无效 → app/api/auth/logout/route.js
 //   - 头像下拉「个人主页」→ /user/[id]
+//   - 头像下拉「私信」→ /messages
+//   - 私信未读角标 → GET /api/chat/unread
 // ============================================================
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { CHAT_UNREAD_EVENT } from "@/lib/chatEvents";
 import "./Header.css";
 
 export default function Header() {
@@ -26,6 +29,21 @@ export default function Header() {
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  async function loadUnreadCount() {
+    try {
+      const response = await fetch("/api/chat/unread");
+      if (!response.ok) {
+        setUnreadCount(0);
+        return;
+      }
+      const data = await response.json();
+      setUnreadCount(data.totalUnread || 0);
+    } catch {
+      setUnreadCount(0);
+    }
+  }
 
   useEffect(() => {
     async function loadUser() {
@@ -34,14 +52,35 @@ export default function Header() {
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
+          loadUnreadCount();
+        } else {
+          setUser(null);
+          setUnreadCount(0);
         }
       } catch {
         setUser(null);
+        setUnreadCount(0);
       }
     }
 
     loadUser();
   }, [pathname]);
+
+  useEffect(() => {
+    if (!user) return undefined;
+
+    function handleUnreadUpdate() {
+      loadUnreadCount();
+    }
+
+    window.addEventListener(CHAT_UNREAD_EVENT, handleUnreadUpdate);
+    const timer = window.setInterval(loadUnreadCount, 30000);
+
+    return () => {
+      window.removeEventListener(CHAT_UNREAD_EVENT, handleUnreadUpdate);
+      window.clearInterval(timer);
+    };
+  }, [user]);
 
   // 点击页面其他区域时关闭下拉框
   useEffect(() => {
@@ -149,6 +188,9 @@ export default function Header() {
                   className="header-user-avatar"
                 />
                 <span className="header-user-name">{user.username}</span>
+                {unreadCount > 0 ? (
+                  <span className="header-user-unread-dot" aria-label={`${unreadCount} 条未读私信`} />
+                ) : null}
                 <span className="header-user-arrow">{menuOpen ? "▲" : "▼"}</span>
               </button>
 
@@ -160,6 +202,18 @@ export default function Header() {
                     onClick={() => setMenuOpen(false)}
                   >
                     个人主页
+                  </Link>
+                  <Link
+                    href="/messages"
+                    className="header-dropdown-item header-dropdown-item-with-badge"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <span>私信</span>
+                    {unreadCount > 0 ? (
+                      <span className="header-unread-badge">
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </span>
+                    ) : null}
                   </Link>
                   <button
                     type="button"

@@ -1,20 +1,23 @@
 "use client";
 // ============================================================
 // 文件作用：文章详情页左侧作者信息栏（替换主导航 Sidebar）
-// 功能对应：展示作者头像、等级、统计数据、关注/私信按钮（UI）
+// 功能对应：展示作者头像、等级、统计数据、关注/私信按钮
 // 维护指引：
 //   - 样式 → AuthorSidebar.css
 //   - 数据 → GET /api/articles/[id]/author
+//   - 私信 → /messages/[userId]
 // ============================================================
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { formatStatCount } from "@/lib/format";
 import FollowButton from "@/components/FollowButton";
 import "./AuthorSidebar.css";
 import "./FollowButton.css";
 
 export default function AuthorSidebar({ articleId }) {
+  const router = useRouter();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fansCount, setFansCount] = useState(0);
@@ -66,6 +69,12 @@ export default function AuthorSidebar({ articleId }) {
   }
 
   const { stats } = profile;
+
+  function handlePrivateMessage() {
+    if (!profile.userId) return;
+    if (profile.isSelf) return;
+    router.push(`/messages/${profile.userId}`);
+  }
 
   return (
     <aside className="author-sidebar" aria-label="作者信息">
@@ -156,7 +165,8 @@ export default function AuthorSidebar({ articleId }) {
           <button
             type="button"
             className="author-sidebar-btn author-sidebar-btn-secondary"
-            onClick={() => alert("私信功能开发中")}
+            onClick={handlePrivateMessage}
+            disabled={!profile.userId || profile.isSelf}
           >
             私信
           </button>

@@ -61,6 +61,14 @@ model user_follows {
   @@id([follower_id, following_id])
 }
 
+model user_blocks {
+  blocker_id String
+  blocked_id String
+  created_at String
+
+  @@id([blocker_id, blocked_id])
+}
+
 model favorite_folders {
   id         String @id
   user_id    String
@@ -109,4 +117,12 @@ model chat_messages {
   content         String
   created_at      String
   conversation    chat_conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+}
+
+model chat_conversation_reads {
+  user_id         String
+  conversation_id String
+  last_read_at    String
+
+  @@id([user_id, conversation_id])
 }

@@ -9,8 +9,8 @@ import {
   getConversationWithMessages,
   sendMessageToUser,
 } from "@/lib/chat";
+import { notifyChatBroadcast } from "@/lib/chatWsNotify";
 import { getSessionUserId } from "@/lib/session";
-import { broadcastToUser } from "@/lib/chatWsServer";
 
 export async function GET(_request, { params }) {
   const userId = await getSessionUserId();
@@ -46,16 +46,19 @@ export async function POST(request, { params }) {
   const result = await sendMessageToUser(userId, peerId, body.content);
 
   if (!result.ok) {
-    return NextResponse.json({ error: result.error || "发送失败" }, { status: 400 });
+    return NextResponse.json(
+      { error: result.error || "发送失败", code: result.code || "" },
+      { status: 400 }
+    );
   }
 
-  const payload = {
-    type: "message",
-    peerId,
-    message: result.message,
-  };
-  broadcastToUser(userId, payload);
-  broadcastToUser(peerId, payload);
+  if (!body.skipBroadcast) {
+    await notifyChatBroadcast({
+      type: "message",
+      peerId,
+      message: result.message,
+    });
+  }
 
   return NextResponse.json({ message: result.message });
 }

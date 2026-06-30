@@ -10,8 +10,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useChatWebSocket } from "@/components/useChatWebSocket";
+import { dispatchChatUnreadUpdate } from "@/lib/chatEvents";
 import "./MessagesPanel.css";
 
 function formatMessageTime(value) {
@@ -39,14 +39,16 @@ export default function MessagesPanel({
   initialConversations = [],
   initialThread = null,
 }) {
-  const router = useRouter();
   const listRef = useRef(null);
   const [conversations, setConversations] = useState(initialConversations);
   const [peer, setPeer] = useState(initialThread?.peer || null);
   const [messages, setMessages] = useState(initialThread?.messages || []);
   const [draft, setDraft] = useState("");
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState("");
+  const [policy, setPolicy] = useState(initialThread?.policy || null);
   const [sending, setSending] = useState(false);
+  const [blocking, setBlocking] = useState(false);
 
   const activePeerIdRef = useRef(activePeerId);
   useEffect(() => {
@@ -56,26 +58,53 @@ export default function MessagesPanel({
   useEffect(() => {
     setPeer(initialThread?.peer || null);
     setMessages(initialThread?.messages || []);
+    setPolicy(initialThread?.policy || null);
+    setError("");
+    setErrorCode("");
   }, [initialThread]);
+
+  const refreshPolicy = useCallback(async (peerId) => {
+    if (!peerId) return;
+    try {
+      const response = await fetch(`/api/chat/with/${peerId}`);
+      if (!response.ok) return;
+      const data = await response.json();
+      setPolicy(data.policy || null);
+    } catch {
+      // 忽略
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activePeerId && !initialThread?.policy) {
+      refreshPolicy(activePeerId);
+    }
+  }, [activePeerId, initialThread?.policy, refreshPolicy]);
 
   useEffect(() => {
     setConversations(initialConversations);
   }, [initialConversations]);
 
-  const upsertConversation = useCallback((peerInfo, message) => {
-    setConversations((current) => {
-      const others = current.filter((item) => item.peer.id !== peerInfo.id);
-      return [
-        {
-          id: message.conversationId,
-          peer: peerInfo,
-          updatedAt: message.createdAt,
-          lastMessage: message,
-        },
-        ...others,
-      ];
-    });
+  const markConversationRead = useCallback(async (peerId) => {
+    if (!peerId) return;
+
+    try {
+      await fetch(`/api/chat/with/${peerId}/read`, { method: "POST" });
+      setConversations((current) =>
+        current.map((item) =>
+          item.peer.id === peerId ? { ...item, unreadCount: 0 } : item
+        )
+      );
+      dispatchChatUnreadUpdate();
+    } catch {
+      // 标记失败不影响聊天
+    }
   }, []);
+
+  useEffect(() => {
+    if (!activePeerId) return;
+    markConversationRead(activePeerId);
+  }, [activePeerId, markConversationRead]);
 
   const handleSocketMessage = useCallback(
     (payload) => {
@@ -84,6 +113,8 @@ export default function MessagesPanel({
       const message = payload.message;
       const involvedPeerId =
         message.senderId === currentUserId ? payload.peerId : message.senderId;
+      const isIncoming = message.senderId !== currentUserId;
+      const isActiveChat = involvedPeerId === activePeerIdRef.current;
 
       setConversations((current) => {
         const existing = current.find((item) => item.peer.id === involvedPeerId);
@@ -94,30 +125,51 @@ export default function MessagesPanel({
             : { id: involvedPeerId, username: "用户", avatarUrl: "/default-avatar.svg" });
 
         const others = current.filter((item) => item.peer.id !== involvedPeerId);
+        const nextUnread = isActiveChat
+          ? 0
+          : isIncoming
+          ? (existing?.unreadCount || 0) + 1
+          : existing?.unreadCount || 0;
+
         return [
           {
             id: message.conversationId,
             peer: peerInfo,
             updatedAt: message.createdAt,
             lastMessage: message,
+            unreadCount: nextUnread,
           },
           ...others,
         ];
       });
+
+      if (isIncoming && !isActiveChat) {
+        dispatchChatUnreadUpdate();
+      }
+
+      if (isActiveChat) {
+        markConversationRead(involvedPeerId);
+      }
 
       if (involvedPeerId === activePeerIdRef.current) {
         setMessages((current) => {
           if (current.some((item) => item.id === message.id)) return current;
           return [...current, message];
         });
+        refreshPolicy(involvedPeerId);
       }
     },
-    [currentUserId, peer]
+    [currentUserId, peer, markConversationRead, refreshPolicy]
   );
 
-  const { connected, sendMessage } = useChatWebSocket({
+  function handleChatError(message, code = "") {
+    setError(message);
+    setErrorCode(code);
+  }
+
+  const { connected, connectionState, sendMessage } = useChatWebSocket({
     onMessage: handleSocketMessage,
-    onError: setError,
+    onError: handleChatError,
   });
 
   useEffect(() => {
@@ -130,9 +182,14 @@ export default function MessagesPanel({
   async function handleSend() {
     const content = draft.trim();
     if (!content || !activePeerId || sending) return;
+    if (policy && !policy.canSend) {
+      handleChatError(policy.error || policy.warning || "当前无法发送消息", policy.code);
+      return;
+    }
 
     setSending(true);
     setError("");
+    setErrorCode("");
 
     const sent = sendMessage(activePeerId, content);
     if (sent) {
@@ -149,7 +206,8 @@ export default function MessagesPanel({
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(data.error || "发送失败");
+        handleChatError(data.error || "发送失败", data.code || "");
+        return;
       }
       setDraft("");
       handleSocketMessage({
@@ -157,12 +215,42 @@ export default function MessagesPanel({
         peerId: activePeerId,
         message: data.message,
       });
+      await refreshPolicy(activePeerId);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "发送失败");
+      handleChatError(err instanceof Error ? err.message : "发送失败", "");
     } finally {
       setSending(false);
     }
   }
+
+  async function handleToggleBlock() {
+    if (!activePeerId || blocking) return;
+    const confirmText = policy?.hasBlockedPeer
+      ? "确定取消拉黑该用户吗？"
+      : "拉黑后将不再接收对方消息，确定拉黑吗？";
+    if (!window.confirm(confirmText)) return;
+
+    setBlocking(true);
+    try {
+      const response = await fetch(`/api/users/${activePeerId}/block`, {
+        method: "POST",
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || "操作失败");
+      }
+      await refreshPolicy(activePeerId);
+      setError("");
+      setErrorCode("");
+    } catch (err) {
+      handleChatError(err instanceof Error ? err.message : "操作失败", "");
+    } finally {
+      setBlocking(false);
+    }
+  }
+
+  const inputDisabled =
+    sending || blocking || Boolean(policy && !policy.canSend);
 
   function handleKeyDown(event) {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -179,7 +267,14 @@ export default function MessagesPanel({
   return (
     <div className="messages-panel">
       <aside className="messages-sidebar">
-        <div className="messages-sidebar-head">私信</div>
+        <div className="messages-sidebar-head">
+          私信
+          {conversations.reduce((sum, item) => sum + (item.unreadCount || 0), 0) > 0 ? (
+            <span className="messages-sidebar-unread">
+              {conversations.reduce((sum, item) => sum + (item.unreadCount || 0), 0)}
+            </span>
+          ) : null}
+        </div>
         <div className="messages-conversation-list">
           {conversations.length === 0 ? (
             <div className="messages-empty-list">暂无会话</div>
@@ -192,7 +287,7 @@ export default function MessagesPanel({
                   activePeerId === item.peer.id
                     ? " messages-conversation-item-active"
                     : ""
-                }`}
+                }${item.unreadCount > 0 ? " messages-conversation-item-unread" : ""}`}
               >
                 <img
                   src={item.peer.avatarUrl || "/default-avatar.svg"}
@@ -208,8 +303,15 @@ export default function MessagesPanel({
                       {formatMessageTime(item.lastMessage?.createdAt || item.updatedAt)}
                     </span>
                   </div>
-                  <div className="messages-conversation-preview">
-                    {previewText(item.lastMessage)}
+                  <div className="messages-conversation-preview-row">
+                    <div className="messages-conversation-preview">
+                      {previewText(item.lastMessage)}
+                    </div>
+                    {item.unreadCount > 0 ? (
+                      <span className="messages-conversation-badge">
+                        {item.unreadCount > 99 ? "99+" : item.unreadCount}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               </Link>
@@ -230,15 +332,49 @@ export default function MessagesPanel({
                 />
                 <div>
                   <div className="messages-main-name">{peer.username}</div>
-                  <div className="messages-main-status">
-                    {connected ? "在线连接中" : "连接中..."}
+                  <div
+                    className={`messages-main-status${
+                      connectionState === "failed"
+                        ? " messages-main-status--failed"
+                        : ""
+                    }`}
+                  >
+                    {connectionState === "connected"
+                      ? "在线连接中"
+                      : connectionState === "failed"
+                      ? "连接失败，正在重试…"
+                      : "连接中…"}
                   </div>
                 </div>
               </div>
-              <Link href={`/user/${peer.id}`} className="messages-profile-link">
-                查看主页
-              </Link>
+              <div className="messages-main-actions">
+                <button
+                  type="button"
+                  className={`messages-block-btn${
+                    policy?.hasBlockedPeer ? " messages-block-btn-active" : ""
+                  }`}
+                  onClick={handleToggleBlock}
+                  disabled={blocking}
+                >
+                  {policy?.hasBlockedPeer ? "取消拉黑" : "拉黑"}
+                </button>
+                <Link href={`/user/${peer.id}`} className="messages-profile-link">
+                  查看主页
+                </Link>
+              </div>
             </div>
+
+            {policy?.blockedByPeer ? (
+              <div className="messages-policy-blocked">你已被拉黑</div>
+            ) : null}
+
+            {policy?.warning && policy.canSend && !policy.blockedByPeer ? (
+              <div className="messages-policy-warning">{policy.warning}</div>
+            ) : null}
+
+            {policy?.hasBlockedPeer ? (
+              <div className="messages-policy-muted">你已拉黑对方，无法继续发送消息</div>
+            ) : null}
 
             <div className="messages-list" ref={listRef}>
               {messages.length === 0 ? (
@@ -263,23 +399,37 @@ export default function MessagesPanel({
               )}
             </div>
 
-            {error ? <div className="messages-error">{error}</div> : null}
+            {error ? (
+              <div
+                className={`messages-error${
+                  errorCode === "BLOCKED_BY_PEER" ? " messages-error--blocked" : ""
+                }`}
+              >
+                {error}
+              </div>
+            ) : null}
 
             <div className="messages-compose">
               <textarea
                 className="messages-input"
-                rows={3}
+                rows={4}
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="输入消息，Enter 发送，Shift+Enter 换行"
-                disabled={sending}
+                placeholder={
+                  policy?.blockedByPeer
+                    ? "你已被拉黑，无法发送消息"
+                    : policy && !policy.canSend
+                    ? policy.error || "当前无法发送消息"
+                    : "输入消息，Enter 发送，Shift+Enter 换行"
+                }
+                disabled={inputDisabled}
               />
               <button
                 type="button"
                 className="messages-send-btn"
                 onClick={handleSend}
-                disabled={sending || !draft.trim()}
+                disabled={inputDisabled || !draft.trim()}
               >
                 发送
               </button>

@@ -6,17 +6,12 @@
 
 /* 单篇文章卡片容器 */
 .post-card {
-  /* 内边距：上下 20px，左右 0 */
   padding: 20px 0;
-  /* 底部边框：卡片之间的分隔线 */
-  border-bottom: 1px solid #eee;
-  /* 去掉链接默认的下划线 */
+  /* 底部边框：卡片之间的分隔线（比原来 #eee 略深一点） */
+  border-bottom: 1px solid #ddd;
   text-decoration: none;
-  /* 文字颜色继承，不变成链接蓝色 */
   color: inherit;
-  /* 块级显示 */
   display: block;
-  /* 过渡动画：鼠标悬停时背景色平滑变化 */
   transition: background 0.2s;
 }
 

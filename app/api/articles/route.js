@@ -3,7 +3,7 @@
 // 访问地址：GET  /api/articles      → 获取所有文章
 //           POST /api/articles      → 创建新文章
 // 功能对应：首页加载文章列表、发布文章时的保存操作
-// 如果首页不显示文章 / 发布失败，检查这个文件
+// 如果首页不显示文章 / 发布失败 / 作者显示不对，检查这个文件
 // ============================================================
 
 // 从 lib/articles.js 导入数据操作函数
@@ -11,6 +11,9 @@ import {
   getAllArticles,
   createArticle,
 } from "@/lib/articles";
+// 从 session 读取当前登录用户
+import { getSessionUserId } from "@/lib/session";
+import { getUserById } from "@/lib/users";
 // NextResponse 用于返回 JSON 格式的 HTTP 响应（类似 Spring Boot 的 ResponseEntity）
 import { NextResponse } from "next/server";
 
@@ -55,8 +58,23 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    // 调用 createArticle 保存到 JSON 文件
-    const newArticle = createArticle(body);
+
+    // 从登录会话获取当前用户，写入文章作者名和头像
+    const userId = await getSessionUserId();
+    if (!userId) {
+      return NextResponse.json({ error: "未登录" }, { status: 401 });
+    }
+    const user = getUserById(userId);
+    if (!user) {
+      return NextResponse.json({ error: "用户不存在" }, { status: 401 });
+    }
+
+    const newArticle = createArticle({
+      ...body,
+      authorId: user.id,
+      authorName: user.username,
+      authorAvatar: user.avatarUrl,
+    });
     // 返回 201 Created 和新文章数据
     return NextResponse.json(newArticle, { status: 201 });
   } catch (error) {

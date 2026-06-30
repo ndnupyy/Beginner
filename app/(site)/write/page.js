@@ -31,8 +31,8 @@ export default function WritePage() {
     });
 
     if (response.ok) {
-      const newArticle = await response.json();
-      router.push(`/article/${newArticle.id}`);
+      router.push("/");
+      router.refresh();
     } else {
       const error = await response.json();
       alert("发布失败：" + (error.error || "未知错误"));

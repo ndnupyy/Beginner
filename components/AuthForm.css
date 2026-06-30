@@ -1,0 +1,178 @@
+/* ============================================================
+   文件作用：登录页表单样式
+   功能对应：/login 页面（登录 / 注册 / 找回密码，链接切换无页签）
+   维护指引：登录页 UI 变形 / 颜色 / 布局 → 本文件 + app/login/login.css
+   ============================================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(252, 85, 49, 0.12), transparent 40%),
+    linear-gradient(180deg, #f8f9fb 0%, #eef1f5 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+  padding: 28px;
+}
+
+.auth-card-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-title {
+  font-size: 28px;
+  color: #fc5531;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.auth-field input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-field input:focus {
+  border-color: #fc5531;
+}
+
+.auth-field-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 密码框下方的「忘记密码？」 */
+.auth-forgot-link {
+  align-self: flex-end;
+  margin-top: 2px;
+}
+
+/* 登录框底部 / 注册页底部的跳转链接 */
+.auth-switch-row {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-link {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-left: 4px;
+  color: #fc5531;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.auth-avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  border: 1px dashed #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.auth-avatar-preview {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.auth-avatar-btn {
+  border: 1px solid #fc5531;
+  background: #fff;
+  color: #fc5531;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.auth-avatar-btn:hover {
+  background: #fc5531;
+  color: #fff;
+}
+
+.auth-message {
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.auth-message-error {
+  background: #fff2f0;
+  color: #cf1322;
+  border: 1px solid #ffccc7;
+}
+
+.auth-message-success {
+  background: #f6ffed;
+  color: #389e0d;
+  border: 1px solid #b7eb8f;
+}
+
+.auth-submit {
+  margin-top: 4px;
+  border: none;
+  border-radius: 8px;
+  background: #fc5531;
+  color: #fff;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #e04a2a;
+}
+
+.auth-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

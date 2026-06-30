@@ -25,21 +25,17 @@ export async function GET(request, { params }) {
     // 从 URL 参数中获取文章 ID（Next.js 16 中 params 可能是 Promise，需要 await）
     const { id } = await params;
     // 根据 ID 查找文章
-    const article = getArticleById(id);
-    // 找不到返回 404 Not Found
+    const article = await getArticleById(id);
     if (!article) {
       return NextResponse.json(
         { error: "文章不存在" },
         { status: 404 }
       );
     }
-    // 检查 URL 是否带有 ?countView=true 参数（用于增加阅读量）
     const url = new URL(request.url);
     if (url.searchParams.get("countView") === "true") {
-      // 阅读量 +1
-      incrementViews(id);
-      // 重新获取更新后的文章数据
-      const updated = getArticleById(id);
+      await incrementViews(id);
+      const updated = await getArticleById(id);
       return NextResponse.json(updated);
     }
     // 正常返回文章数据
@@ -68,7 +64,7 @@ export async function PUT(request, { params }) {
       );
     }
     // 执行更新
-    const updated = updateArticle(id, body);
+    const updated = await updateArticle(id, body);
     if (!updated) {
       return NextResponse.json(
         { error: "文章不存在" },
@@ -91,7 +87,7 @@ export async function DELETE(request, { params }) {
   try {
     const { id } = await params;
     // 执行删除
-    const success = deleteArticle(id);
+    const success = await deleteArticle(id);
     if (!success) {
       return NextResponse.json(
         { error: "文章不存在" },

@@ -15,9 +15,8 @@ import ArticleSearchList from "@/components/ArticleSearchList";
  * 这是一个"服务端组件"（默认），在服务器上运行
  * 负责从数据库读取文章，再交给客户端组件做搜索过滤
  */
-export default function Home() {
-  // 从 SQLite 数据库获取所有文章（已按时间倒序排列）
-  const articles = getAllArticles();
+export default async function Home() {
+  const articles = await getAllArticles();
 
   return (
     <div className="page-container">

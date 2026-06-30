@@ -28,7 +28,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "两次输入的密码不一致" }, { status: 400 });
     }
 
-    const result = resetPasswordByUsername(username, password);
+    const result = await resetPasswordByUsername(username, password);
     if (!result.ok) {
       return NextResponse.json({ error: result.error }, { status: 404 });
     }

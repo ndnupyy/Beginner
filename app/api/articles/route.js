@@ -24,7 +24,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     // 从 JSON 文件读取所有文章
-    const articles = getAllArticles();
+    const articles = await getAllArticles();
     // 返回 JSON 响应，status 200 表示成功（类似 HTTP 200 OK）
     return NextResponse.json(articles);
   } catch (error) {
@@ -64,12 +64,12 @@ export async function POST(request) {
     if (!userId) {
       return NextResponse.json({ error: "未登录" }, { status: 401 });
     }
-    const user = getUserById(userId);
+    const user = await getUserById(userId);
     if (!user) {
       return NextResponse.json({ error: "用户不存在" }, { status: 401 });
     }
 
-    const newArticle = createArticle({
+    const newArticle = await createArticle({
       ...body,
       authorId: user.id,
       authorName: user.username,

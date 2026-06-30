@@ -22,7 +22,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "请输入账号和密码" }, { status: 400 });
     }
 
-    const user = getUserByLogin(login.trim());
+    const user = await getUserByLogin(login.trim());
     if (!user || !verifyPassword(password, user.password_hash)) {
       return NextResponse.json({ error: "账号或密码错误" }, { status: 401 });
     }

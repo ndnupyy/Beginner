@@ -20,7 +20,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "未登录" }, { status: 401 });
     }
 
-    const existingUser = getUserById(userId);
+    const existingUser = await getUserById(userId);
     if (!existingUser) {
       return NextResponse.json({ error: "用户不存在" }, { status: 404 });
     }
@@ -29,7 +29,7 @@ export async function POST(request) {
     const file = formData.get("avatar");
 
     const avatarUrl = await saveAvatarFromFormData(file);
-    const user = updateUserAvatar(userId, avatarUrl);
+    const user = await updateUserAvatar(userId, avatarUrl);
 
     return NextResponse.json({ user, avatarUrl });
   } catch (error) {

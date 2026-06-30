@@ -45,11 +45,11 @@ export async function POST(request) {
       return NextResponse.json({ error: "两次输入的密码不一致" }, { status: 400 });
     }
 
-    if (getUserByUsername(username.trim())) {
+    if (await getUserByUsername(username.trim())) {
       return NextResponse.json({ error: "用户名已被占用" }, { status: 409 });
     }
 
-    if (getUserByEmail(email.trim())) {
+    if (await getUserByEmail(email.trim())) {
       return NextResponse.json({ error: "邮箱已被注册" }, { status: 409 });
     }
 
@@ -58,7 +58,7 @@ export async function POST(request) {
       avatarUrl = saveAvatarFromBase64(avatarBase64, avatarMimeType);
     }
 
-    createUser({
+    await createUser({
       username: username.trim(),
       email: email.trim(),
       password,

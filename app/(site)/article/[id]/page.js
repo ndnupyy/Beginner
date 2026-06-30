@@ -22,17 +22,14 @@ export default async function ArticleDetailPage({ params }) {
   const { id } = await params;
 
   // 先查找文章是否存在
-  const article = getArticleById(id);
+  const article = await getArticleById(id);
 
-  // 如果找不到文章，显示 404 页面
   if (!article) {
     notFound();
   }
 
-  // 增加阅读量（每次访问详情页 +1）
-  incrementViews(id);
-  // 重新获取更新后的文章（阅读量已 +1）
-  const updatedArticle = getArticleById(id);
+  await incrementViews(id);
+  const updatedArticle = await getArticleById(id);
 
   // 格式化发布时间为可读格式
   const formattedDate = new Date(updatedArticle.createdAt).toLocaleDateString(

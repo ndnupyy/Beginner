@@ -1,0 +1,25 @@
+/* ============================================================
+   文件作用：排行榜入口链接样式
+   功能对应：首页标题栏右侧的 CSDN 风格链接
+   维护指引：链接样式 → 本文件 + components/RankingLink.js
+   ============================================================ */
+
+.ranking-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.ranking-link:hover {
+  color: #fc5531;
+}
+
+.ranking-link-icon {
+  width: 16px;
+  height: 16px;
+}

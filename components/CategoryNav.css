@@ -1,0 +1,64 @@
+/* ============================================================
+   文件作用：首页分类专栏导航样式（CSDN 风格）
+   功能对应：横向可滚动的圆角标签栏
+   维护指引：标签栏样式 → 本文件 + components/CategoryNav.js
+   ============================================================ */
+
+.category-nav {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.category-nav-scroll {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 28px 2px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.category-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-nav-item {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #f0f0f0;
+  color: #333;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.category-nav-item:hover:not(.category-nav-item-active) {
+  background: #e8e8e8;
+}
+
+.category-nav-item-active {
+  background: #222;
+  color: #fff;
+}
+
+.category-nav-more {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #999;
+  pointer-events: none;
+  background: linear-gradient(to left, #f5f6f7 60%, transparent);
+  padding-left: 12px;
+}

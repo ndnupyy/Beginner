@@ -1,0 +1,53 @@
+/* ============================================================
+   文件作用：阅读排行榜页样式
+   功能对应：/ranking 页面列表与排名序号
+   维护指引：排行榜页样式 → 本文件 + app/(site)/ranking/page.js
+   ============================================================ */
+
+.ranking-desc {
+  margin: -12px 0 20px;
+  font-size: 13px;
+  color: #999;
+}
+
+.ranking-list {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.ranking-item .post-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.ranking-item:last-child .post-card {
+  border-bottom: none;
+}
+
+.ranking-rank {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-top: 20px;
+  border-radius: 6px;
+  background: #f0f0f0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ranking-rank-top {
+  background: #fc5531;
+  color: #fff;
+}

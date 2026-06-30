@@ -47,6 +47,19 @@ body {
   margin-bottom: 20px;
 }
 
+/* 标题行：左侧标题 + 右侧操作（如排行榜链接） */
+.page-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-header-row .page-title {
+  margin-bottom: 0;
+}
+
 /* 空状态提示（没有文章时显示） */
 .empty-state {
   text-align: center;

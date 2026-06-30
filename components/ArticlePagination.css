@@ -1,0 +1,75 @@
+/* ============================================================
+   文件作用：首页分页控件样式
+   功能对应：ArticlePagination.js
+   维护指引：分页样式 → 本文件
+   ============================================================ */
+
+.article-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+  padding: 20px 0 8px;
+}
+
+.article-pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.article-pagination-btn:hover:not(:disabled) {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.article-pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.article-pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.article-pagination-page {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.article-pagination-page:hover:not(.article-pagination-page-active) {
+  border-color: #fc5531;
+  color: #fc5531;
+}
+
+.article-pagination-page-active {
+  background: #fc5531;
+  border-color: #fc5531;
+  color: #fff;
+  cursor: default;
+}
+
+.article-pagination-summary {
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 4px;
+}

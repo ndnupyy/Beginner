@@ -1,14 +1,14 @@
 // ============================================================
 // 文件作用：首页（文章列表页，对应图一）
 // 访问地址：http://localhost:3000/
-// 功能对应：展示所有文章的卡片列表 + 顶部标题搜索
+// 功能对应：展示所有文章的卡片列表 + 分类专栏 + 标题搜索 + 分页（每页 10 篇）
 // 如果首页不显示文章 / 搜索不对，检查这个文件和 ArticleSearchList.js
 // ============================================================
 
 // 从 lib/articles.js 直接读取文章数据（服务端读取，不需要 API）
 import { getAllArticles } from "@/lib/articles";
-// 引入带搜索功能的文章列表组件（客户端组件）
 import ArticleSearchList from "@/components/ArticleSearchList";
+import RankingLink from "@/components/RankingLink";
 
 /**
  * Home 页面组件 - 首页
@@ -20,10 +20,11 @@ export default async function Home() {
 
   return (
     <div className="page-container">
-      {/* 页面标题 */}
-      <h1 className="page-title">最新文章</h1>
+      <div className="page-header-row">
+        <h1 className="page-title">最新文章</h1>
+        <RankingLink />
+      </div>
 
-      {/* 搜索框 + 文章列表（搜索逻辑在 ArticleSearchList 里） */}
       <ArticleSearchList articles={articles} />
     </div>
   );

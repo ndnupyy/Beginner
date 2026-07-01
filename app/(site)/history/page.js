@@ -22,8 +22,7 @@ export default async function HistoryPage() {
   const articles = await getBrowseHistory(userId);
 
   return (
-    <MainPageContainer>
-      <h1 className="page-title">历史</h1>
+    <MainPageContainer className="main-page-container--history">
       <HistoryList articles={articles} />
     </MainPageContainer>
   );

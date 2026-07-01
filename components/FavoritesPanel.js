@@ -10,6 +10,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import ArticleLink from "@/components/ArticleLink";
 import FavoritesPagination, {
   FAVORITES_PAGE_SIZE,
 } from "@/components/FavoritesPagination";
@@ -334,10 +335,10 @@ export default function FavoritesPanel({
               <ul className="favorites-article-list">
                 {paginatedArticles.map((article) => (
                   <li key={article.id} className="favorites-article-item">
-                    <Link href={`/article/${article.id}`} className="favorites-article-link">
+                    <ArticleLink href={`/article/${article.id}`} className="favorites-article-link">
                       <span className="favorites-article-tag">[BLOG]</span>
                       <span className="favorites-article-title">{article.title}</span>
-                    </Link>
+                    </ArticleLink>
                     <span className="favorites-article-star" aria-hidden="true">
                       ★
                     </span>

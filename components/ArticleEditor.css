@@ -31,17 +31,16 @@
   background: #fafafa;
 }
 
-.editor-toolbar-host.is-pinned {
+.editor-container.embedded .editor-toolbar-host--fixed {
   position: fixed;
-  z-index: 90;
+  z-index: 95;
   background: #fafafa;
   border-bottom: 1px solid #f0f0f0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.editor-toolbar-host.is-pinned .editor-toolbar {
+.editor-container.embedded .editor-toolbar-host--fixed .editor-toolbar {
   border-bottom: none;
-  box-shadow: none;
 }
 
 .editor-toolbar-btn {

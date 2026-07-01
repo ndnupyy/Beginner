@@ -5,7 +5,7 @@
 // ============================================================
 
 // 引入 Next.js 的 Link 组件，点击卡片跳转到文章详情页
-import Link from "next/link";
+import ArticleLink from "@/components/ArticleLink";
 // 引入阅读量格式化函数（如 2900 → "2.9k"）
 import { formatViews, formatCount } from "@/lib/format";
 // 引入本组件的 CSS 样式
@@ -35,7 +35,7 @@ export default function PostCard({ article }) {
   return (
     // Link 包裹整个卡片，点击跳转到 /article/[id] 详情页
     // 模板字符串 `${id}` 把 ID 拼接到 URL 中
-    <Link href={`/article/${id}`} className="post-card">
+    <ArticleLink href={`/article/${id}`} className="post-card">
       {/* ===== 作者信息行 ===== */}
       <div className="post-card-author">
         {/* 作者头像：<img> 标签显示图片 */}
@@ -81,6 +81,6 @@ export default function PostCard({ article }) {
           />
         )}
       </div>
-    </Link>
+    </ArticleLink>
   );
 }

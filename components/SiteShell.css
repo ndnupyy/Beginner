@@ -14,6 +14,11 @@
   --sidebar-width: 260px;
 }
 
+/* 历史页无顶栏，内容区占满右侧高度 */
+.site-layout--history .site-main {
+  --site-header-height: 0px;
+}
+
 .site-main {
   flex: 1;
   min-width: 0;
@@ -29,6 +34,76 @@
   width: 100%;
   min-height: 0;
   overflow-y: auto;
+}
+
+/* 离开当前页前往文章详情：淡出 */
+html.article-page-leaving .site-main-body {
+  opacity: 0;
+  transition: opacity 0.24s ease;
+  pointer-events: none;
+}
+
+/* 侧边栏切换功能页：淡出并轻微下移 */
+html.functional-page-leaving .site-main-body {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+@keyframes site-page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes site-article-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.site-main-body--page-enter {
+  animation: site-page-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-main-body--article-enter {
+  animation: site-article-enter 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes site-history-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.site-main-body--history-enter {
+  animation: site-history-enter 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.article-page-leaving .site-main-body,
+  html.functional-page-leaving .site-main-body {
+    transition: none;
+    transform: none;
+  }
+
+  .site-main-body--page-enter,
+  .site-main-body--article-enter,
+  .site-main-body--history-enter {
+    animation: none;
+  }
 }
 
 /* 文章详情页底部操作栏占位，避免内容被遮挡 */

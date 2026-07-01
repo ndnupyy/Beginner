@@ -41,7 +41,7 @@ export default function RecommendedAuthors({ authors: initialAuthors = [] }) {
               <FollowButton
                 userId={author.userId}
                 initialFollowing={author.isFollowing}
-                size="compact"
+                size="sidebar"
                 onFollowingChange={(following) =>
                   handleFollowingChange(author.userId, following)
                 }

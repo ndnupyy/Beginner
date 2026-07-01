@@ -21,6 +21,13 @@ export default function SiteShell({ children }) {
   const [userId, setUserId] = useState("");
   const articleMatch = pathname.match(/^\/article\/([^/]+)$/);
   const articleId = articleMatch?.[1];
+  const isArticlePage = Boolean(articleId);
+  const isHistoryPage = pathname === "/history";
+  const pageEnterClass = isArticlePage
+    ? "site-main-body--article-enter"
+    : isHistoryPage
+    ? "site-main-body--history-enter"
+    : "site-main-body--page-enter";
 
   useEffect(() => {
     let cancelled = false;
@@ -47,7 +54,9 @@ export default function SiteShell({ children }) {
 
   return (
     <div
-      className={`site-layout${articleId ? " site-layout--article" : ""}`}
+      className={`site-layout${articleId ? " site-layout--article" : ""}${
+        isHistoryPage ? " site-layout--history" : ""
+      }`}
     >
       {userId ? <ChatUnreadListener userId={userId} /> : null}
       {articleId ? (
@@ -56,8 +65,10 @@ export default function SiteShell({ children }) {
         <Sidebar />
       )}
       <div className="site-main">
-        <Header />
-        <main className="site-main-body">{children}</main>
+        {!isHistoryPage ? <Header /> : null}
+        <main key={pathname} className={`site-main-body ${pageEnterClass}`}>
+          {children}
+        </main>
       </div>
     </div>
   );

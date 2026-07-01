@@ -18,3 +18,10 @@
 .main-page-container.main-page-container--wide {
   max-width: 1200px;
 }
+
+/* 历史页：无顶栏，全高布局，顶栏搜索由 HistoryList 自行渲染 */
+.main-page-container.main-page-container--history {
+  max-width: 960px;
+  min-height: 100vh;
+  padding: 0;
+}

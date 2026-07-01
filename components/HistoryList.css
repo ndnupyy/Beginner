@@ -1,7 +1,123 @@
 /* ============================================================
-   文件作用：浏览历史页样式
-   功能对应：components/HistoryList.js
+   文件作用：浏览历史页样式（顶栏搜索 + 标签 + 列表）
+   功能对应：components/HistoryList.js、/history 页
+   维护指引：搜索框样式 → 本文件 .history-search-* 段
    ============================================================ */
+
+.history-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* 置顶页头：替代站点顶栏，含标题与搜索 */
+.history-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  padding: 18px 20px 16px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+}
+
+.history-page-title {
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.2;
+}
+
+.history-page-body {
+  padding: 16px 20px 28px;
+}
+
+/* 搜索栏：对齐顶栏 HeaderSearchBar 的圆角胶囊风格 */
+.history-search {
+  width: 100%;
+}
+
+.history-search-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-search-input-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 999px;
+  background: #f7f8fa;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.history-search-input-wrap:focus-within {
+  border-color: #fc5531;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(252, 85, 49, 0.1);
+}
+
+.history-search-icon {
+  flex-shrink: 0;
+  margin-right: 8px;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.55;
+}
+
+.history-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+}
+
+.history-search-input::placeholder {
+  color: #bbb;
+}
+
+.history-search-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+  height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: #fc5531;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.history-search-submit:hover {
+  background: #e84a28;
+}
+
+.history-search-submit-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.history-search-hint {
+  margin: 10px 4px 0;
+  font-size: 13px;
+  color: #999;
+  line-height: 1.5;
+}
 
 .history-tag-nav {
   position: relative;
@@ -61,4 +177,28 @@
   font-size: 14px;
   cursor: pointer;
   padding: 0;
+}
+
+@media (max-width: 640px) {
+  .history-page-header {
+    padding: 14px 16px 12px;
+  }
+
+  .history-page-body {
+    padding: 14px 16px 24px;
+  }
+
+  .history-page-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .history-search-control {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .history-search-submit {
+    width: 100%;
+  }
 }

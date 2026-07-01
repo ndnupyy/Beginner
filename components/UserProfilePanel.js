@@ -10,6 +10,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ArticleLink from "@/components/ArticleLink";
 import { formatCount, formatViews } from "@/lib/format";
 import FollowButton from "@/components/FollowButton";
 import "./UserProfilePanel.css";
@@ -85,19 +86,19 @@ function ProfileArticleRow({ article, isSelf, onDeleted }) {
     <article className="profile-article-row">
       <div className="profile-article-main">
         {article.thumbnailUrl && (
-          <Link href={`/article/${article.id}`} className="profile-article-thumb-wrap">
+          <ArticleLink href={`/article/${article.id}`} className="profile-article-thumb-wrap">
             <img
               src={article.thumbnailUrl}
               alt={article.title}
               className="profile-article-thumb"
             />
-          </Link>
+          </ArticleLink>
         )}
         <div className="profile-article-text">
           <div className="profile-article-title-row">
-            <Link href={`/article/${article.id}`} className="profile-article-title">
+            <ArticleLink href={`/article/${article.id}`} className="profile-article-title">
               {article.title || "无标题"}
-            </Link>
+            </ArticleLink>
             {article.status === "draft" && (
               <span className="profile-article-badge">草稿</span>
             )}

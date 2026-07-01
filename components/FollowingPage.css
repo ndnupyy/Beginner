@@ -1,80 +1,73 @@
 /* ============================================================
-   文件作用：关注页布局样式
+   文件作用：关注页 CSDN 风格布局（灰底 + 双栏白卡片）
    功能对应：app/(site)/following/page.js
    维护指引：
    | 问题现象 | 维护文件 |
-   | 文章展示框宽度 / 与首页不一致 | 本文件 .following-main |
-   | 文章与侧栏间距 | 本文件 .following-page gap |
-   | 文章卡片样式 | components/PostCard.css |
+   | 灰底未生效 | app/globals.css .site-main-body:has(.following-page) |
+   | 动态卡片样式 | components/FollowingFeedCard.css |
    | 作者推荐侧栏 | components/RecommendedAuthors.css |
    ============================================================ */
 
-/* 外层：固定宽文章区 + 右侧作者推荐，整体居中 */
-.following-page {
-  display: flex;
-  align-items: flex-start;
-  gap: 48px;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
+.following-page.page-container {
+  max-width: 1200px;
+  padding: 16px 20px 28px;
 }
 
-/* 左侧文章区：与首页 page-container 同宽（960px），PostCard 直接展示 */
-.following-page .following-main {
-  flex: 0 0 960px;
-  width: 960px;
-  max-width: 960px;
-  margin: 0;
-  padding: 0 20px;
+.following-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.following-main {
+  flex: 1;
   min-width: 0;
 }
 
-.following-page .following-main .page-title {
-  margin-bottom: 20px;
-}
-
-/* 文章列表：与首页 ArticleSearchList 一致，无额外白卡片包裹 */
-.following-page .following-main .article-list {
+.following-feed-list {
   display: flex;
   flex-direction: column;
 }
 
-/* 空状态 */
-.following-empty {
+.following-empty-panel {
+  padding: 56px 24px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   text-align: center;
-  padding: 48px 20px;
   color: #999;
 }
 
 .following-empty-text {
+  margin: 0 0 8px;
   font-size: 15px;
-  margin-bottom: 8px;
+  color: #666;
 }
 
 .following-empty-hint {
+  margin: 0;
   font-size: 13px;
   color: #bbb;
 }
 
-@media (max-width: 1320px) {
-  .following-page {
-    flex-direction: column;
-    width: 100%;
-    gap: 24px;
-  }
+.following-empty-hint a {
+  color: #fc5531;
+  text-decoration: none;
+}
 
-  .following-page .following-main {
-    flex: 1 1 auto;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
+.following-empty-hint a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1080px) {
+  .following-layout {
+    flex-direction: column;
   }
 
   .recommended-authors {
     position: static;
     width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
+    max-width: none;
+    flex: 1 1 auto;
   }
 }

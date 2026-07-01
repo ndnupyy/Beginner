@@ -9,7 +9,13 @@
 // ============================================================
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  FUNCTIONAL_LEAVE_MS,
+  endFunctionalLeaveTransition,
+  shouldAnimateFunctionalNavigation,
+  startFunctionalLeaveTransition,
+} from "@/lib/functionalPageTransition";
 import "./Sidebar.css";
 
 const NAV_ITEMS = [
@@ -74,6 +80,25 @@ function isActive(pathname, href) {
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  /**
+   * 侧边栏点击时先播放离场动画，再执行路由跳转
+   * @param {React.MouseEvent<HTMLAnchorElement>} event
+   * @param {string} href - 目标路由
+   */
+  function handleNavClick(event, href) {
+    if (!shouldAnimateFunctionalNavigation(event)) return;
+    if (isActive(pathname, href)) return;
+
+    event.preventDefault();
+    startFunctionalLeaveTransition();
+
+    window.setTimeout(() => {
+      router.push(href);
+      window.setTimeout(endFunctionalLeaveTransition, 80);
+    }, FUNCTIONAL_LEAVE_MS);
+  }
 
   return (
     <aside className="sidebar" aria-label="主导航">
@@ -93,6 +118,7 @@ export default function Sidebar() {
                 item.accent ? " sidebar-item-accent" : ""
               }`}
               aria-current={active ? "page" : undefined}
+              onClick={(event) => handleNavClick(event, item.href)}
             >
               <span className="sidebar-item-icon">{item.icon}</span>
               <span className="sidebar-item-label">{item.label}</span>

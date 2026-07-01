@@ -1,0 +1,144 @@
+/* ============================================================
+   文件作用：关注页动态卡片样式（CSDN 灰底白卡片）
+   功能对应：components/FollowingFeedCard.js
+   维护指引：单条卡片观感 → 本文件
+   ============================================================ */
+
+.following-feed-card {
+  display: block;
+  margin-bottom: 12px;
+  padding: 18px 20px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.following-feed-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  background: #fff;
+}
+
+.following-feed-card-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  min-width: 0;
+}
+
+.following-feed-card-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.following-feed-card-username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  flex-shrink: 0;
+}
+
+.following-feed-card-action {
+  font-size: 13px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.following-feed-card-time {
+  margin-left: auto;
+  font-size: 12px;
+  color: #bbb;
+  flex-shrink: 0;
+}
+
+.following-feed-card-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.following-feed-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.following-feed-card-title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #222;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.following-feed-card:hover .following-feed-card-title {
+  color: #fc5531;
+}
+
+.following-feed-card-summary {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #888;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.following-feed-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.following-feed-card-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #bbb;
+}
+
+.following-feed-card-meta-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.following-feed-card-thumb {
+  width: 168px;
+  height: 104px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: cover;
+  background: #f0f0f0;
+}
+
+@media (max-width: 720px) {
+  .following-feed-card {
+    padding: 14px 16px;
+  }
+
+  .following-feed-card-body {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .following-feed-card-thumb {
+    width: 100%;
+    height: 180px;
+  }
+
+  .following-feed-card-time {
+    margin-left: 0;
+  }
+}

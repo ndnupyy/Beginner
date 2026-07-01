@@ -9,6 +9,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import ArticleLink from "@/components/ArticleLink";
 import "./HomeHeadlineCarousel.css";
 
 // 大屏同时可见卡片数
@@ -97,26 +98,28 @@ export default function HomeHeadlineCarousel({ items }) {
           }}
         >
           {items.map((item) => (
-            <Link
+            <ArticleLink
               key={item.id}
               href={`/article/${item.id}`}
               className="home-headline-card"
             >
-              {item.thumbnailUrl ? (
-                <img
-                  src={item.thumbnailUrl}
-                  alt={item.title}
-                  className="home-headline-card-image"
-                />
-              ) : (
-                <div
-                  className="home-headline-card-placeholder"
-                  aria-hidden="true"
-                />
-              )}
-              <div className="home-headline-card-mask" aria-hidden="true" />
-              <p className="home-headline-card-title">{item.title}</p>
-            </Link>
+              <div className="home-headline-card-media">
+                {item.thumbnailUrl ? (
+                  <img
+                    src={item.thumbnailUrl}
+                    alt={item.title}
+                    className="home-headline-card-image"
+                  />
+                ) : (
+                  <div
+                    className="home-headline-card-placeholder"
+                    aria-hidden="true"
+                  />
+                )}
+                <div className="home-headline-card-mask" aria-hidden="true" />
+                <p className="home-headline-card-title">{item.title}</p>
+              </div>
+            </ArticleLink>
           ))}
         </div>
       </div>

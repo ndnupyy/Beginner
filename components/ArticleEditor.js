@@ -48,11 +48,11 @@ import {
   getTablePosFromView,
   insertEditorTable,
 } from "@/lib/editorTable";
+import { usePinnedEditorToolbar } from "@/lib/usePinnedEditorToolbar";
 import CodeBlockContextMenu from "@/components/CodeBlockContextMenu";
 import CodeInsertModal from "@/components/CodeInsertModal";
 import LinkInsertModal from "@/components/LinkInsertModal";
 import TableInsertModal from "@/components/TableInsertModal";
-import { usePinnedEditorToolbar } from "@/lib/usePinnedEditorToolbar";
 import "./ArticleEditor.css";
 
 const DEFAULT_CODE_MODAL = { code: "", language: "javascript" };
@@ -718,7 +718,7 @@ export default function ArticleEditor({
     <div
       className={`editor-container${embedded ? " embedded" : ""}`}
       style={
-        pinnedToolbar.pinned
+        pinnedToolbar.active
           ? { paddingTop: `${pinnedToolbar.height}px` }
           : undefined
       }
@@ -727,10 +727,10 @@ export default function ArticleEditor({
         <div
           ref={toolbarHostRef}
           className={`editor-toolbar-host${
-            pinnedToolbar.pinned ? " is-pinned" : ""
+            pinnedToolbar.active ? " editor-toolbar-host--fixed" : ""
           }`}
           style={
-            pinnedToolbar.pinned
+            pinnedToolbar.active
               ? {
                   top: `${pinnedToolbar.top}px`,
                   left: `${pinnedToolbar.left}px`,

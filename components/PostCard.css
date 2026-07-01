@@ -12,12 +12,17 @@
   text-decoration: none;
   color: inherit;
   display: block;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s ease;
 }
 
 /* 鼠标悬停时背景变浅灰色 */
 .post-card:hover {
   background: #fafafa;
+}
+
+.post-card:active {
+  transform: scale(0.992);
+  transition: transform 0.15s ease, background 0.2s;
 }
 
 /* 作者信息行：头像 + 名字 */

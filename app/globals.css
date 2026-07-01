@@ -68,6 +68,12 @@ body {
   background-color: #f4f5f5;
 }
 
+/* 关注页：与首页一致的灰底画布 */
+.site-main-body:has(.following-page) {
+  --page-canvas-bg: #f4f5f5;
+  background-color: #f4f5f5;
+}
+
 /* 空状态提示（没有文章时显示） */
 .empty-state {
   text-align: center;

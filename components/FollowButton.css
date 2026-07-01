@@ -53,6 +53,33 @@
   background: #fff7f4;
 }
 
+/* 关注页侧栏：CSDN 橙色描边关注按钮 */
+.follow-btn--sidebar {
+  flex-shrink: 0;
+  min-width: 64px;
+  padding: 4px 12px;
+  border: 1px solid #fc5531;
+  background: #fff;
+  color: #fc5531;
+  font-size: 12px;
+}
+
+.follow-btn--sidebar:hover:not(:disabled) {
+  background: #fff7f4;
+}
+
+.follow-btn--sidebar.is-following {
+  border-color: #ddd;
+  color: #999;
+  background: #fafafa;
+}
+
+.follow-btn--sidebar.is-following:hover:not(:disabled) {
+  border-color: #fc5531;
+  color: #fc5531;
+  background: #fff7f4;
+}
+
 .follow-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

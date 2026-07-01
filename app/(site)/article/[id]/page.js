@@ -10,9 +10,11 @@
 import { toArticleBodyHtml } from "@/lib/contentFormat";
 import { getArticleById, ARTICLE_STATUS } from "@/lib/articles";
 import { formatViews, formatCount } from "@/lib/format";
+import { getUserProfileBackgroundUrl } from "@/lib/profileBackground";
 import { getSessionUserId } from "@/lib/session";
 import ArticleReactions from "@/components/ArticleReactions";
 import ArticleViewTracker from "@/components/ArticleViewTracker";
+import PageBackground from "@/components/PageBackground";
 import { notFound } from "next/navigation";
 
 export default async function ArticleDetailPage({ params }) {
@@ -41,8 +43,13 @@ export default async function ArticleDetailPage({ params }) {
     }
   );
 
+  const authorBackgroundUrl = article.authorId
+    ? await getUserProfileBackgroundUrl(article.authorId)
+    : "";
+
   return (
     <>
+      <PageBackground url={authorBackgroundUrl} />
       <ArticleViewTracker articleId={id} />
       <div className="page-container page-container--article">
         <article className="article-detail">

@@ -7,6 +7,7 @@
 
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { getContentPlainText } from "@/lib/contentFormat";
+import { isSameTag } from "@/lib/tags";
 import "./ArticleSettings.css";
 
 const ArticleSettings = forwardRef(function ArticleSettings(
@@ -55,7 +56,7 @@ const ArticleSettings = forwardRef(function ArticleSettings(
 
   function handleAddTag() {
     const trimmed = newTag.trim();
-    if (trimmed && !tags.includes(trimmed)) {
+    if (trimmed && !tags.some((tag) => isSameTag(tag, trimmed))) {
       setTags([...tags, trimmed]);
     }
     setNewTag("");
@@ -63,7 +64,7 @@ const ArticleSettings = forwardRef(function ArticleSettings(
   }
 
   function handleRemoveTag(tagToRemove) {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+    setTags(tags.filter((tag) => !isSameTag(tag, tagToRemove)));
   }
 
   function handleCoverUpload(e) {

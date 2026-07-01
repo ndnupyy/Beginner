@@ -14,6 +14,11 @@ import ArticleLink from "@/components/ArticleLink";
 import FavoritesPagination, {
   FAVORITES_PAGE_SIZE,
 } from "@/components/FavoritesPagination";
+import {
+  articleHasTag,
+  collectUniqueTagsFromArticles,
+  isSameTag,
+} from "@/lib/tags";
 import "./FavoritesPanel.css";
 
 /**
@@ -43,24 +48,16 @@ export default function FavoritesPanel({
 
   const activeFolder = folders.find((folder) => folder.id === activeFolderId);
 
-  /** 当前收藏夹内文章的全部标签（去重排序） */
-  const availableTags = useMemo(() => {
-    const tagSet = new Set();
-    for (const article of articles) {
-      for (const tag of article.tags || []) {
-        const trimmed = (tag || "").trim();
-        if (trimmed) tagSet.add(trimmed);
-      }
-    }
-    return Array.from(tagSet).sort((a, b) => a.localeCompare(b, "zh-CN"));
-  }, [articles]);
+  /** 当前收藏夹内文章的全部标签（不区分大小写去重后排序） */
+  const availableTags = useMemo(
+    () => collectUniqueTagsFromArticles(articles),
+    [articles]
+  );
 
-  /** 按选中标签过滤后的文章列表 */
+  /** 按选中标签过滤后的文章列表（不区分大小写） */
   const filteredArticles = useMemo(() => {
     if (!activeTag) return articles;
-    return articles.filter((article) =>
-      (article.tags || []).some((tag) => (tag || "").trim() === activeTag)
-    );
+    return articles.filter((article) => articleHasTag(article.tags, activeTag));
   }, [articles, activeTag]);
 
   const totalCount = filteredArticles.length;
@@ -314,7 +311,9 @@ export default function FavoritesPanel({
                   key={tag}
                   type="button"
                   className={`favorites-tag-nav-item${
-                    activeTag === tag ? " favorites-tag-nav-item-active" : ""
+                    isSameTag(activeTag, tag)
+                      ? " favorites-tag-nav-item-active"
+                      : ""
                   }`}
                   onClick={() => setActiveTag(tag)}
                 >

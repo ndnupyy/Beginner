@@ -47,6 +47,7 @@ model users {
   email               String  @unique(map: "sqlite_autoindex_users_3")
   password_hash       String
   avatar_url          String? @default("/default-avatar.svg")
+  profile_background_url String? @default("")
   reset_token         String?
   reset_token_expires String?
   created_at          String

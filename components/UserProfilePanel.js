@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import ArticleLink from "@/components/ArticleLink";
 import { formatCount, formatViews } from "@/lib/format";
 import FollowButton from "@/components/FollowButton";
+import PageBackground from "@/components/PageBackground";
 import "./UserProfilePanel.css";
 import "./FollowButton.css";
 
@@ -171,6 +172,11 @@ export default function UserProfilePanel({ initialProfile }) {
   const [profile, setProfile] = useState(initialProfile);
   const [activeTab, setActiveTab] = useState("articles");
   const [fansCount, setFansCount] = useState(profile.stats.fansCount);
+  const [backgroundUrl, setBackgroundUrl] = useState(
+    profile.profileBackgroundUrl || ""
+  );
+  const [uploadingBackground, setUploadingBackground] = useState(false);
+  const backgroundInputRef = useRef(null);
 
   const displayArticles = useMemo(() => {
     if (activeTab === "drafts" && profile.isSelf) {
@@ -195,10 +201,135 @@ export default function UserProfilePanel({ initialProfile }) {
     }));
   }
 
+  /**
+   * 触发本地图片选择
+   */
+  function handlePickBackground() {
+    backgroundInputRef.current?.click();
+  }
+
+  /**
+   * 上传主页背景图
+   * @param {React.ChangeEvent<HTMLInputElement>} event
+   */
+  async function handleBackgroundChange(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    setUploadingBackground(true);
+    try {
+      const formData = new FormData();
+      formData.append("background", file);
+
+      const response = await fetch("/api/auth/upload-profile-background", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "上传失败");
+      }
+
+      const nextUrl = data.profileBackgroundUrl || "";
+      setBackgroundUrl(nextUrl);
+      setProfile((current) => ({
+        ...current,
+        profileBackgroundUrl: nextUrl,
+      }));
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "背景图上传失败");
+    } finally {
+      setUploadingBackground(false);
+    }
+  }
+
+  /**
+   * 清除主页背景，恢复默认底色
+   */
+  async function handleClearBackground() {
+    if (!backgroundUrl) return;
+
+    const confirmed = confirm("确定恢复默认主页背景吗？");
+    if (!confirmed) return;
+
+    setUploadingBackground(true);
+    try {
+      const response = await fetch("/api/auth/upload-profile-background", {
+        method: "DELETE",
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "清除失败");
+      }
+
+      setBackgroundUrl("");
+      setProfile((current) => ({
+        ...current,
+        profileBackgroundUrl: "",
+      }));
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "背景图清除失败");
+    } finally {
+      setUploadingBackground(false);
+    }
+  }
+
   const { stats } = profile;
 
   return (
-    <div className="user-profile">
+    <>
+      <PageBackground url={backgroundUrl} />
+      <div
+        className={`user-profile${
+          backgroundUrl ? " user-profile--has-bg" : ""
+        }`}
+      >
+        {profile.isSelf && (
+          <div className="profile-bg-toolbar">
+            <input
+              ref={backgroundInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="profile-bg-input"
+              onChange={handleBackgroundChange}
+            />
+            <button
+              type="button"
+              className="profile-bg-btn"
+              onClick={handlePickBackground}
+              disabled={uploadingBackground}
+            >
+              {uploadingBackground
+                ? "处理中…"
+                : backgroundUrl
+                ? "更换背景"
+                : "上传主页背景"}
+            </button>
+            {backgroundUrl ? (
+              <button
+                type="button"
+                className="profile-bg-btn profile-bg-btn-ghost"
+                onClick={handleClearBackground}
+                disabled={uploadingBackground}
+              >
+                恢复默认
+              </button>
+            ) : null}
+            <span className="profile-bg-hint">支持 JPG / PNG / WebP / GIF，最大 5MB</span>
+          </div>
+        )}
+
+        {backgroundUrl ? (
+          <div
+            className="profile-hero-banner"
+            style={{ backgroundImage: `url("${backgroundUrl}")` }}
+            aria-hidden="true"
+          />
+        ) : null}
+
       <section className="profile-header-card">
         <div className="profile-header-main">
           <img
@@ -327,5 +458,6 @@ export default function UserProfilePanel({ initialProfile }) {
         </section>
       </div>
     </div>
+    </>
   );
 }

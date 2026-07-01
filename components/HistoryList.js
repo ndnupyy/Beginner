@@ -14,6 +14,11 @@ import PostCard from "@/components/PostCard";
 import FavoritesPagination, {
   FAVORITES_PAGE_SIZE,
 } from "@/components/FavoritesPagination";
+import {
+  articleHasTag,
+  collectUniqueTagsFromArticles,
+  isSameTag,
+} from "@/lib/tags";
 import "./HistoryList.css";
 
 /**
@@ -28,23 +33,17 @@ export default function HistoryList({ articles: initialArticles = [] }) {
   const [activeTag, setActiveTag] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const availableTags = useMemo(() => {
-    const tagSet = new Set();
-    for (const article of articles) {
-      for (const tag of article.tags || []) {
-        const trimmed = (tag || "").trim();
-        if (trimmed) tagSet.add(trimmed);
-      }
-    }
-    return Array.from(tagSet).sort((a, b) => a.localeCompare(b, "zh-CN"));
-  }, [articles]);
+  const availableTags = useMemo(
+    () => collectUniqueTagsFromArticles(articles),
+    [articles]
+  );
 
   const filteredArticles = useMemo(() => {
     let result = articles;
 
     if (activeTag) {
       result = result.filter((article) =>
-        (article.tags || []).some((tag) => (tag || "").trim() === activeTag)
+        articleHasTag(article.tags, activeTag)
       );
     }
 
@@ -169,7 +168,7 @@ export default function HistoryList({ articles: initialArticles = [] }) {
                   key={tag}
                   type="button"
                   className={`history-tag-nav-item${
-                    activeTag === tag ? " history-tag-nav-item-active" : ""
+                    isSameTag(activeTag, tag) ? " history-tag-nav-item-active" : ""
                   }`}
                   onClick={() => setActiveTag(tag)}
                 >

@@ -74,6 +74,24 @@ body {
   background-color: #f4f5f5;
 }
 
+/* 作者自定义主页背景（个人主页 / 其文章详情页） */
+.site-main-body.site-main-body--custom-bg {
+  background-color: #e8eaed;
+  background-image: var(--author-page-bg);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+}
+
+/* 自定义背景下内容卡片保持可读 */
+.site-main-body.site-main-body--custom-bg .article-detail,
+.site-main-body.site-main-body--custom-bg .profile-header-card,
+.site-main-body.site-main-body--custom-bg .profile-sidebar-card,
+.site-main-body.site-main-body--custom-bg .profile-content {
+  background: rgba(255, 255, 255, 0.97);
+}
+
 /* 空状态提示（没有文章时显示） */
 .empty-state {
   text-align: center;

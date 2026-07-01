@@ -17,8 +17,10 @@ body {
   /* 字体：优先使用系统字体，保证中英文都好看 */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  /* 背景色：浅灰色（类似 CSDN 的背景） */
-  background: #f5f6f7;
+  /* 页面画布底色变量（首页等浅灰背景） */
+  --page-canvas-bg: #f5f6f7;
+  /* 背景色：浅灰色 */
+  background: var(--page-canvas-bg);
   /* 默认文字颜色 */
   color: #333;
   /* 字体大小 */
@@ -58,6 +60,12 @@ body {
 
 .page-header-row .page-title {
   margin-bottom: 0;
+}
+
+/* 首页：CSDN 风格浅灰画布底色 */
+.site-main-body:has(.home-page) {
+  --page-canvas-bg: #f4f5f5;
+  background-color: #f4f5f5;
 }
 
 /* 空状态提示（没有文章时显示） */

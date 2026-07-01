@@ -1,14 +1,16 @@
 // ============================================================
 // 文件作用：首页（文章列表页，对应图一）
 // 访问地址：http://localhost:3000/
-// 功能对应：展示所有文章的卡片列表 + 分类专栏 + 标题搜索 + 分页（每页 10 篇）
-// 如果首页不显示文章 / 搜索不对，检查这个文件和 ArticleSearchList.js
+// 功能对应：资讯头条轮播 + 文章列表 + 分类专栏 + 分页
+// 如果首页不显示文章 / 轮播不对，检查 HomeHeadlineCarousel.js、ArticleSearchList.js
 // ============================================================
 
-// 从 lib/articles.js 直接读取文章数据（服务端读取，不需要 API）
 import { getAllArticles } from "@/lib/articles";
+import { getHeadlineCarouselArticles } from "@/lib/homeHeadlines";
+import HomeHeadlineCarousel from "@/components/HomeHeadlineCarousel";
 import ArticleSearchList from "@/components/ArticleSearchList";
 import RankingLink from "@/components/RankingLink";
+import "./home-page.css";
 
 /**
  * Home 页面组件 - 首页
@@ -17,15 +19,18 @@ import RankingLink from "@/components/RankingLink";
  */
 export default async function Home() {
   const articles = await getAllArticles();
+  const headlineItems = getHeadlineCarouselArticles(articles);
 
   return (
-    <div className="page-container">
-      <div className="page-header-row">
-        <h1 className="page-title">最新文章</h1>
-        <RankingLink />
-      </div>
+    <div className="page-container home-page">
+      <HomeHeadlineCarousel items={headlineItems} />
 
-      <ArticleSearchList articles={articles} />
+      <div className="home-feed-panel">
+        <div className="home-feed-toolbar">
+          <RankingLink />
+        </div>
+        <ArticleSearchList articles={articles} />
+      </div>
     </div>
   );
 }

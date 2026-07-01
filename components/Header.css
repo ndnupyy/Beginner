@@ -1,6 +1,6 @@
 /* ============================================================
    文件作用：顶部导航栏样式
-   功能对应：Logo、头像下拉菜单、写文章按钮
+   功能对应：Logo、头像下拉菜单、发布文章按钮
    维护指引：导航栏 / 下拉框样式问题 → 本文件 + components/Header.js
    ============================================================ */
 
@@ -13,13 +13,14 @@
 }
 
 .header-inner {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
   height: 56px;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 20px;
 }
 
 .header-logo {
@@ -27,6 +28,15 @@
   font-size: 20px;
   font-weight: 700;
   color: #fc5531;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  white-space: nowrap;
 }
 
 .header-write-btn {
@@ -43,12 +53,6 @@
 
 .header-write-btn:hover {
   background: #e04a2a;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 /* 头像 + 用户名下拉触发区 */

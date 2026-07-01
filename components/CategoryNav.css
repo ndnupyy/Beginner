@@ -6,7 +6,7 @@
 
 .category-nav {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .category-nav-scroll {
@@ -59,6 +59,6 @@
   font-size: 18px;
   color: #999;
   pointer-events: none;
-  background: linear-gradient(to left, #f5f6f7 60%, transparent);
+  background: linear-gradient(to left, var(--page-canvas-bg, #f5f6f7) 60%, transparent);
   padding-left: 12px;
 }

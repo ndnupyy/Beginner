@@ -2,7 +2,7 @@
 // 客户端组件：需要 fetch 当前用户、头像下拉菜单、更换头像、退出登录
 
 // ============================================================
-// 文件作用：顶部导航栏（Logo、用户头像下拉、写文章）
+// 文件作用：顶部导航栏（Logo、居中搜索、用户头像下拉、发布文章）
 // 功能对应：登录后各博客页面的顶部栏
 // 维护指引：
 //   - 样式 / 下拉框 → Header.css
@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CHAT_UNREAD_EVENT } from "@/lib/chatEvents";
+import HeaderSearchBar from "@/components/HeaderSearchBar";
 import "./Header.css";
 
 export default function Header() {
@@ -171,6 +172,8 @@ export default function Header() {
           简易博客
         </Link>
 
+        <HeaderSearchBar />
+
         <div className="header-actions">
           {user && (
             <div className="header-user-menu" ref={menuRef}>
@@ -243,7 +246,7 @@ export default function Header() {
           )}
 
           <Link href="/write" className="header-write-btn">
-            写文章
+            发布文章
           </Link>
         </div>
       </div>

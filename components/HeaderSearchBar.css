@@ -1,0 +1,231 @@
+/* ============================================================
+   文件作用：顶栏居中搜索框样式
+   功能对应：components/HeaderSearchBar.js
+   ============================================================ */
+
+.header-search {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  justify-self: center;
+}
+
+.header-search--fallback {
+  height: 40px;
+}
+
+.header-search-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-search-input-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 999px;
+  background: #f7f8fa;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.header-search-input-wrap:focus-within {
+  border-color: #fc5531;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(252, 85, 49, 0.1);
+}
+
+.header-search-hot-icon {
+  flex-shrink: 0;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.header-search-divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: 16px;
+  margin: 0 8px;
+  background: #e0e0e0;
+}
+
+.header-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+}
+
+.header-search-input::placeholder {
+  color: #bbb;
+}
+
+.header-search-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: #fc5531;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.header-search-submit:hover {
+  background: #e84a28;
+}
+
+.header-search-submit-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.header-search-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(640px, calc(100vw - 120px));
+  z-index: 300;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  padding: 16px 0 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.header-search-dropdown-column {
+  min-width: 0;
+  padding: 0 18px;
+}
+
+.header-search-dropdown-divider {
+  background: #f0f0f0;
+}
+
+.header-search-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.header-search-panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fc5531;
+}
+
+.header-search-panel-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.header-search-panel-clear:hover {
+  color: #666;
+}
+
+.header-search-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header-search-panel-item {
+  display: block;
+  width: 100%;
+  padding: 10px 4px;
+  border: none;
+  background: transparent;
+  color: #333;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.header-search-panel-item:hover {
+  background: #f7f8fa;
+  color: #fc5531;
+}
+
+.header-search-panel-item-discovery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.header-search-panel-item-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-search-panel-hot {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.header-search-panel-empty {
+  padding: 8px 4px 4px;
+  color: #bbb;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .header-search {
+    max-width: none;
+  }
+
+  .header-search-submit {
+    padding: 0 12px;
+  }
+
+  .header-search-submit span:not(.header-search-submit-icon) {
+    display: none;
+  }
+
+  .header-search-dropdown {
+    width: min(640px, calc(100vw - 32px));
+  }
+}
+
+@media (max-width: 640px) {
+  .header-search-dropdown {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1px auto;
+  }
+
+  .header-search-dropdown-divider {
+    width: auto;
+    height: 1px;
+    margin: 4px 18px;
+  }
+}

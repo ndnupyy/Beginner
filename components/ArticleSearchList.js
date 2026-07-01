@@ -2,57 +2,31 @@
 // 客户端组件：搜索框需要响应用户输入，必须在浏览器端运行
 
 // ============================================================
-// 文件作用：首页文章搜索 + 列表展示
-// 功能对应：首页顶部的分类专栏 + 搜索框，按专栏 / 标题关键词过滤文章
+// 文件作用：首页文章列表展示（分类筛选 + 搜索结果）
+// 功能对应：首页分类专栏 + 文章列表 + 分页
+// 搜索框 → components/HeaderSearchBar.js（顶栏居中）
 // 筛选参数：?category=专栏名  ?q=关键词  ?page=页码（可组合，每页 10 篇）
-// 如果搜索不生效 / 回首页没反应，检查这个文件
 // ============================================================
 
-import { useState, useMemo, useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { buildHomeUrl } from "@/lib/homeUrl";
 import PostCard from "@/components/PostCard";
 import CategoryNav from "@/components/CategoryNav";
 import ArticlePagination, { PAGE_SIZE } from "@/components/ArticlePagination";
 import "./ArticleSearchList.css";
 
 /**
- * ArticleSearchListInner - 搜索列表内部组件
+ * ArticleSearchListInner - 列表内部组件
  * 必须单独拆出来，因为 useSearchParams 需要被 Suspense 包裹
  */
 function ArticleSearchListInner({ articles }) {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
-  // 从 URL 参数 ?q=xxx 读取当前搜索关键词（点击 Logo 回到 / 时此处会变为空）
   const searchKeyword = (searchParams.get("q") || "").trim();
   const categoryFilter = (searchParams.get("category") || "").trim();
   const rawPage = parseInt(searchParams.get("page") || "1", 10);
   const requestedPage = Number.isNaN(rawPage) || rawPage < 1 ? 1 : rawPage;
-
-  // 输入框里正在输入的文字
-  const [inputValue, setInputValue] = useState(searchKeyword);
-
-  // 当 URL 变化时（例如点击 Logo 从 /?q=xxx 跳回 /），同步更新输入框
-  useEffect(() => {
-    setInputValue(searchParams.get("q") || "");
-  }, [searchParams]);
-
-  /**
-   * 按回车执行搜索：把关键词写入 URL 参数
-   * 例如搜索 "Next" → 地址变为 /?q=Next
-   */
-  function handleSearch() {
-    const trimmed = inputValue.trim();
-    router.push(buildHomeUrl(searchParams, { q: trimmed }));
-  }
-
-  function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  }
 
   const filteredArticles = useMemo(() => {
     let result = articles;
@@ -99,32 +73,19 @@ function ArticleSearchListInner({ articles }) {
     <>
       <CategoryNav articles={articles} />
 
-      <div className="article-search-bar">
-        <div className="article-search-input-wrap">
-          <span className="article-search-icon">🔍</span>
-          <input
-            type="text"
-            className="article-search-input"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="搜索文章标题，按回车检索..."
-          />
-        </div>
-        {(isSearching || isCategoryFiltered || showPagination) && totalCount > 0 && (
-          <p className="article-search-result-hint">
-            {isCategoryFiltered && isSearching
-              ? `「${categoryFilter}」专栏下找到 ${totalCount} 篇相关文章`
-              : isCategoryFiltered
-              ? `「${categoryFilter}」专栏共 ${totalCount} 篇文章`
-              : isSearching
-              ? `找到 ${totalCount} 篇相关文章`
-              : `共 ${totalCount} 篇文章`}
-            {showPagination &&
-              `，第 ${currentPage}/${totalPages} 页，每页 ${PAGE_SIZE} 篇`}
-          </p>
-        )}
-      </div>
+      {(isSearching || isCategoryFiltered || showPagination) && totalCount > 0 && (
+        <p className="article-search-result-hint">
+          {isCategoryFiltered && isSearching
+            ? `「${categoryFilter}」专栏下找到 ${totalCount} 篇相关文章`
+            : isCategoryFiltered
+            ? `「${categoryFilter}」专栏共 ${totalCount} 篇文章`
+            : isSearching
+            ? `找到 ${totalCount} 篇相关文章`
+            : `共 ${totalCount} 篇文章`}
+          {showPagination &&
+            `，第 ${currentPage}/${totalPages} 页，每页 ${PAGE_SIZE} 篇`}
+        </p>
+      )}
 
       {paginatedArticles.length > 0 ? (
         <>

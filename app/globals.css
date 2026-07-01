@@ -183,6 +183,15 @@ body {
   font-weight: 600;
 }
 
+.article-detail-content hr,
+.article-detail-content hr.article-divider {
+  border: none;
+  height: 0;
+  margin: 28px 0;
+  border-top: 1px solid #e0e0e0;
+  background: none;
+}
+
 .article-detail-content pre {
   margin: 0.75em 0;
   padding: 16px;
@@ -245,6 +254,13 @@ body {
   max-width: 100%;
   margin: 0.75em auto;
   background: #fff;
+  table-layout: fixed;
+  box-sizing: border-box;
+  border-right: 1px solid #e8e8e8;
+}
+
+.article-detail-content table col {
+  min-width: 60px;
 }
 
 .article-detail-content table[data-table-align="left"] {
@@ -272,6 +288,12 @@ body {
   padding: 8px 12px;
   min-width: 60px;
   vertical-align: top;
+  box-sizing: border-box;
+}
+
+.article-detail-content table tr td:last-child,
+.article-detail-content table tr th:last-child {
+  border-right: 1px solid #e8e8e8;
 }
 
 .article-detail-content table th {

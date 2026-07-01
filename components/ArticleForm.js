@@ -18,6 +18,7 @@ export default function ArticleForm({
   isDraft = false,
 }) {
   const settingsRef = useRef(null);
+  const editorCardRef = useRef(null);
   const [title, setTitle] = useState(initialData.title || "");
   const [content, setContent] = useState(initialData.content || "");
   const [savingDraft, setSavingDraft] = useState(false);
@@ -78,7 +79,7 @@ export default function ArticleForm({
 
   return (
     <div className="article-form-page">
-      <div className="write-editor-card">
+      <div className="write-editor-card" ref={editorCardRef}>
         <div className="write-title-row">
           <input
             type="text"
@@ -95,6 +96,7 @@ export default function ArticleForm({
           embedded
           showToolbar
           hideTitle
+          toolbarAnchorRef={editorCardRef}
         />
       </div>
 

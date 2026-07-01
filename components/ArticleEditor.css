@@ -10,7 +10,15 @@
 }
 
 .editor-container.embedded {
-  min-height: calc(100vh - 180px);
+  min-height: 0;
+}
+
+.editor-container.embedded .editor-prose {
+  max-height: var(--write-editor-prose-max-height, calc(100vh - 312px));
+  min-height: 280px;
+  overflow-y: auto;
+  overflow-x: auto;
+  overscroll-behavior: contain;
 }
 
 .editor-toolbar {
@@ -21,6 +29,19 @@
   padding: 10px 20px;
   border-bottom: 1px solid #f0f0f0;
   background: #fafafa;
+}
+
+.editor-toolbar-host.is-pinned {
+  position: fixed;
+  z-index: 90;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.editor-toolbar-host.is-pinned .editor-toolbar {
+  border-bottom: none;
+  box-shadow: none;
 }
 
 .editor-toolbar-btn {
@@ -52,6 +73,20 @@
 
 .editor-toolbar-btn-text {
   font-weight: 700;
+}
+
+.editor-toolbar-btn-divider {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editor-toolbar-divider-icon {
+  display: block;
+  width: 16px;
+  height: 0;
+  border-top: 2px solid currentColor;
+  border-radius: 1px;
 }
 
 .editor-toolbar-divider {
@@ -106,7 +141,7 @@
   border: 1px solid #e8e8e8;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  z-index: 30;
+  z-index: 120;
 }
 
 .editor-toolbar-menu-item {
@@ -220,6 +255,11 @@
 
 .editor-prose {
   padding: 24px;
+  overflow-x: auto;
+}
+
+/* 非 embedded 模式保留整页延展；embedded 在上方单独定义 */
+.editor-container:not(.embedded) .editor-prose {
   min-height: calc(100vh - 280px);
 }
 
@@ -231,8 +271,21 @@
   color: #333;
 }
 
+.editor-container.embedded .editor-prose .tiptap {
+  min-height: 280px;
+}
+
 .editor-prose .tiptap p {
   margin: 0.5em 0;
+}
+
+.editor-prose .tiptap hr,
+.editor-prose .tiptap hr.article-divider {
+  border: none;
+  height: 0;
+  margin: 28px 0;
+  border-top: 1px solid #e0e0e0;
+  background: none;
 }
 
 .editor-prose .tiptap ul,
@@ -376,20 +429,82 @@
 }
 
 .editor-prose .tiptap .tableWrapper {
+  display: block;
   max-width: 100%;
   margin: 0.75em 0;
+  overflow: visible;
+  box-sizing: border-box;
+  box-shadow: inset -1px 0 0 #e8e8e8;
 }
 
 .editor-prose .tiptap .tableWrapper table {
   margin: 0;
+  table-layout: fixed;
+  box-sizing: border-box;
+  max-width: none;
+}
+
+.editor-prose .tiptap {
+  --default-cell-min-width: 60px;
+}
+
+.editor-prose .tiptap.resize-cursor,
+.editor-prose.resize-cursor .tiptap {
+  cursor: col-resize;
+}
+
+.editor-prose .tiptap.row-resize-cursor,
+.editor-prose.row-resize-cursor .tiptap {
+  cursor: row-resize;
+}
+
+.editor-prose .tiptap .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 20;
+  background-color: #91caff;
+  pointer-events: none;
+}
+
+.editor-prose .tiptap tr.row-resize-active td,
+.editor-prose .tiptap tr.row-resize-active th,
+.editor-prose .tiptap tr.row-resize-dragging td,
+.editor-prose .tiptap tr.row-resize-dragging th {
+  position: relative;
+}
+
+.editor-prose .tiptap tr.row-resize-active td::after,
+.editor-prose .tiptap tr.row-resize-active th::after,
+.editor-prose .tiptap tr.row-resize-dragging td::after,
+.editor-prose .tiptap tr.row-resize-dragging th::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 4px;
+  z-index: 20;
+  background-color: #91caff;
+  pointer-events: none;
+}
+
+.editor-prose .tiptap table td:not([data-colwidth]):not(.column-resize-dragging),
+.editor-prose .tiptap table th:not([data-colwidth]):not(.column-resize-dragging) {
+  min-width: var(--default-cell-min-width);
 }
 
 .editor-prose .tiptap table,
 .editor-prose .tiptap .article-editor-table {
   border-collapse: collapse;
-  max-width: 100%;
-  margin: 0.75em auto;
   background: #fff;
+}
+
+.editor-prose .tiptap .tableWrapper table,
+.editor-prose .tiptap .tableWrapper .article-editor-table {
+  max-width: none;
 }
 
 .editor-prose .tiptap table[data-table-align="left"] {
@@ -417,6 +532,13 @@
   padding: 8px 12px;
   min-width: 60px;
   vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.editor-prose .tiptap table tr td:last-child,
+.editor-prose .tiptap table tr th:last-child {
+  border-right: 1px solid #e8e8e8;
 }
 
 .editor-prose .tiptap table th {

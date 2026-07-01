@@ -7,7 +7,7 @@
 //   - 数据 → lib/profile.js
 // ============================================================
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatCount, formatViews } from "@/lib/format";
@@ -22,8 +22,39 @@ function formatJoinDate(iso) {
 
 function ProfileArticleRow({ article, isSelf, onDeleted }) {
   const router = useRouter();
+  // 文章行右侧「更多」菜单开关
+  const [menuOpen, setMenuOpen] = useState(false);
+  // 菜单容器引用，用于判断点击是否发生在菜单外
+  const menuRef = useRef(null);
+
+  // 点击页面其他区域时关闭下拉菜单
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  /**
+   * 切换文章操作菜单展开状态
+   */
+  function toggleMenu() {
+    setMenuOpen((current) => !current);
+  }
 
   async function handleDelete() {
+    // 先收起菜单，避免确认框弹出后菜单仍悬在界面上
+    setMenuOpen(false);
+
     const confirmed = confirm("确定要删除这篇文章吗？此操作不可恢复。");
     if (!confirmed) return;
 
@@ -93,17 +124,42 @@ function ProfileArticleRow({ article, isSelf, onDeleted }) {
       </div>
 
       {isSelf && (
-        <div className="profile-article-actions">
-          <Link href={`/edit/${article.id}`} className="profile-article-btn profile-article-btn-edit">
-            编辑
-          </Link>
+        <div className="profile-article-menu" ref={menuRef}>
           <button
             type="button"
-            className="profile-article-btn profile-article-btn-delete"
-            onClick={handleDelete}
+            className="profile-article-menu-trigger"
+            onClick={toggleMenu}
+            aria-expanded={menuOpen}
+            aria-haspopup="true"
+            aria-label="文章操作"
           >
-            删除
+            <span className="profile-article-menu-dots" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </button>
+
+          {menuOpen && (
+            <div className="profile-article-dropdown" role="menu">
+              <Link
+                href={`/edit/${article.id}`}
+                className="profile-article-dropdown-item"
+                role="menuitem"
+                onClick={() => setMenuOpen(false)}
+              >
+                编辑
+              </Link>
+              <button
+                type="button"
+                className="profile-article-dropdown-item profile-article-dropdown-item-danger"
+                role="menuitem"
+                onClick={handleDelete}
+              >
+                删除
+              </button>
+            </div>
+          )}
         </div>
       )}
     </article>

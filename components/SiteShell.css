@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  --site-header-height: 56px;
 }
 
 /* 顶栏下方的主体滚动区（侧边栏 + Header 之外的页面功能） */

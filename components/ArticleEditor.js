@@ -11,9 +11,9 @@ import Link from "@tiptap/extension-link";
 import {
   TableCell,
   TableHeader,
-  TableRow,
 } from "@tiptap/extension-table";
 import { ArticleTable } from "@/lib/articleTable";
+import { ArticleTableRow } from "@/lib/articleTableRow";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 import { toEditorHtml } from "@/lib/contentFormat";
@@ -52,6 +52,7 @@ import CodeBlockContextMenu from "@/components/CodeBlockContextMenu";
 import CodeInsertModal from "@/components/CodeInsertModal";
 import LinkInsertModal from "@/components/LinkInsertModal";
 import TableInsertModal from "@/components/TableInsertModal";
+import { usePinnedEditorToolbar } from "@/lib/usePinnedEditorToolbar";
 import "./ArticleEditor.css";
 
 const DEFAULT_CODE_MODAL = { code: "", language: "javascript" };
@@ -322,6 +323,15 @@ function EditorToolbar({
 
       <button
         type="button"
+        className="editor-toolbar-btn editor-toolbar-btn-divider"
+        title="分隔线"
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+      >
+        <span className="editor-toolbar-divider-icon" aria-hidden="true" />
+      </button>
+
+      <button
+        type="button"
         className={`editor-toolbar-btn${
           editor.isActive("codeBlock") ? " is-active" : ""
         }`}
@@ -374,6 +384,7 @@ export default function ArticleEditor({
   embedded = false,
   showToolbar = false,
   hideTitle = false,
+  toolbarAnchorRef = null,
 }) {
   const [internalTitle, setInternalTitle] = useState("");
   const [codeModalOpen, setCodeModalOpen] = useState(false);
@@ -397,8 +408,15 @@ export default function ArticleEditor({
   const editingCodeBlockPosRef = useRef(null);
   const editorRef = useRef(null);
   const imageInputRef = useRef(null);
+  const toolbarHostRef = useRef(null);
   const openEditModalRef = useRef(() => {});
   const showContextMenuRef = useRef(() => {});
+
+  const pinnedToolbar = usePinnedEditorToolbar({
+    enabled: embedded && showToolbar && Boolean(toolbarAnchorRef),
+    anchorRef: toolbarAnchorRef,
+    toolbarRef: toolbarHostRef,
+  });
 
   const title = controlledTitle !== undefined ? controlledTitle : internalTitle;
   const showTitleRow = !hideTitle;
@@ -455,6 +473,11 @@ export default function ArticleEditor({
       StarterKit.configure({
         codeBlock: false,
         link: false,
+        horizontalRule: {
+          HTMLAttributes: {
+            class: "article-divider",
+          },
+        },
       }),
       ArticleCodeBlock,
       ArticleTableCaption,
@@ -490,12 +513,15 @@ export default function ArticleEditor({
         },
       }),
       ArticleTable.configure({
-        resizable: false,
+        resizable: true,
+        handleWidth: 6,
+        cellMinWidth: 60,
+        lastColumnResizable: true,
         HTMLAttributes: {
           class: "article-editor-table",
         },
       }),
-      TableRow,
+      ArticleTableRow,
       TableHeader,
       TableCell,
     ],
@@ -689,16 +715,39 @@ export default function ArticleEditor({
     title.length >= MIN_TITLE_LENGTH && title.length <= MAX_TITLE_LENGTH;
 
   return (
-    <div className={`editor-container${embedded ? " embedded" : ""}`}>
+    <div
+      className={`editor-container${embedded ? " embedded" : ""}`}
+      style={
+        pinnedToolbar.pinned
+          ? { paddingTop: `${pinnedToolbar.height}px` }
+          : undefined
+      }
+    >
       {showToolbar && (
-        <EditorToolbar
-          editor={editor}
-          onOpenCodeModal={openInsertModal}
-          onOpenLinkModal={openLinkModal}
-          onOpenTableModal={openTableModal}
-          onPickImage={handlePickImage}
-          imageUploading={imageUploading}
-        />
+        <div
+          ref={toolbarHostRef}
+          className={`editor-toolbar-host${
+            pinnedToolbar.pinned ? " is-pinned" : ""
+          }`}
+          style={
+            pinnedToolbar.pinned
+              ? {
+                  top: `${pinnedToolbar.top}px`,
+                  left: `${pinnedToolbar.left}px`,
+                  width: `${pinnedToolbar.width}px`,
+                }
+              : undefined
+          }
+        >
+          <EditorToolbar
+            editor={editor}
+            onOpenCodeModal={openInsertModal}
+            onOpenLinkModal={openLinkModal}
+            onOpenTableModal={openTableModal}
+            onPickImage={handlePickImage}
+            imageUploading={imageUploading}
+          />
+        </div>
       )}
 
       <input

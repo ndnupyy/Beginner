@@ -5,13 +5,18 @@
 
 .article-form-page {
   padding-bottom: 80px;
+  /* 正文可视区高度 = 视口 - 顶栏 - 功能栏 - 标题 - 页头与边距 - 底栏 */
+  --write-editor-prose-max-height: calc(
+    100vh - var(--site-header-height, 56px) - 256px
+  );
 }
 
 .write-editor-card {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
+  /* 不可 hidden，否则内部 editor-toolbar 的 sticky 会失效 */
+  overflow: visible;
 }
 
 .write-title-row {

@@ -22,6 +22,108 @@ function formatJoinDate(iso) {
   return new Date(iso).toLocaleDateString("zh-CN");
 }
 
+function ProfileSelfActionsMenu({
+  backgroundUrl,
+  uploadingBackground,
+  backgroundInputRef,
+  onPickBackground,
+  onBackgroundChange,
+  onClearBackground,
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  function handlePickBackground() {
+    setMenuOpen(false);
+    onPickBackground();
+  }
+
+  async function handleClearBackground() {
+    setMenuOpen(false);
+    await onClearBackground();
+  }
+
+  return (
+    <div className="profile-header-menu" ref={menuRef}>
+      <input
+        ref={backgroundInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        className="profile-bg-input"
+        onChange={onBackgroundChange}
+      />
+      <button
+        type="button"
+        className="profile-header-menu-trigger"
+        onClick={() => setMenuOpen((current) => !current)}
+        aria-expanded={menuOpen}
+        aria-haspopup="true"
+        aria-label="个人主页操作"
+      >
+        <span className="profile-header-menu-dots" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
+      </button>
+
+      {menuOpen ? (
+        <div className="profile-header-dropdown" role="menu">
+          <Link
+            href="/write"
+            className="profile-header-dropdown-item"
+            role="menuitem"
+            onClick={() => setMenuOpen(false)}
+          >
+            去创作
+          </Link>
+          <button
+            type="button"
+            className="profile-header-dropdown-item"
+            role="menuitem"
+            onClick={handlePickBackground}
+            disabled={uploadingBackground}
+            title="建议横图 1920×1080 以上，最大 10MB"
+          >
+            {uploadingBackground
+              ? "处理中…"
+              : backgroundUrl
+              ? "更换背景"
+              : "上传背景"}
+          </button>
+          {backgroundUrl ? (
+            <button
+              type="button"
+              className="profile-header-dropdown-item"
+              role="menuitem"
+              onClick={handleClearBackground}
+              disabled={uploadingBackground}
+            >
+              恢复默认
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function ProfileArticleRow({ article, isSelf, onDeleted }) {
   const router = useRouter();
   // 文章行右侧「更多」菜单开关
@@ -282,55 +384,8 @@ export default function UserProfilePanel({ initialProfile }) {
   return (
     <>
       <PageBackground url={backgroundUrl} />
-      <div
-        className={`user-profile${
-          backgroundUrl ? " user-profile--has-bg" : ""
-        }`}
-      >
-        {profile.isSelf && (
-          <div className="profile-bg-toolbar">
-            <input
-              ref={backgroundInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              className="profile-bg-input"
-              onChange={handleBackgroundChange}
-            />
-            <button
-              type="button"
-              className="profile-bg-btn"
-              onClick={handlePickBackground}
-              disabled={uploadingBackground}
-            >
-              {uploadingBackground
-                ? "处理中…"
-                : backgroundUrl
-                ? "更换背景"
-                : "上传主页背景"}
-            </button>
-            {backgroundUrl ? (
-              <button
-                type="button"
-                className="profile-bg-btn profile-bg-btn-ghost"
-                onClick={handleClearBackground}
-                disabled={uploadingBackground}
-              >
-                恢复默认
-              </button>
-            ) : null}
-            <span className="profile-bg-hint">支持 JPG / PNG / WebP / GIF，最大 5MB</span>
-          </div>
-        )}
-
-        {backgroundUrl ? (
-          <div
-            className="profile-hero-banner"
-            style={{ backgroundImage: `url("${backgroundUrl}")` }}
-            aria-hidden="true"
-          />
-        ) : null}
-
-      <section className="profile-header-card">
+      <div className="user-profile">
+        <section className="profile-header-card">
         <div className="profile-header-main">
           <img
             src={profile.avatarUrl || "/default-avatar.svg"}
@@ -360,12 +415,14 @@ export default function UserProfilePanel({ initialProfile }) {
 
         <div className="profile-header-actions">
           {profile.isSelf ? (
-            <>
-              <Link href="/write" className="profile-header-btn profile-header-btn-primary">
-                去创作
-              </Link>
-              <span className="profile-header-hint">在此管理你的博文</span>
-            </>
+            <ProfileSelfActionsMenu
+              backgroundUrl={backgroundUrl}
+              uploadingBackground={uploadingBackground}
+              backgroundInputRef={backgroundInputRef}
+              onPickBackground={handlePickBackground}
+              onBackgroundChange={handleBackgroundChange}
+              onClearBackground={handleClearBackground}
+            />
           ) : profile.canFollow ? (
             <FollowButton
               userId={profile.userId}

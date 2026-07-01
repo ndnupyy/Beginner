@@ -74,14 +74,17 @@ body {
   background-color: #f4f5f5;
 }
 
-/* 作者自定义主页背景（个人主页 / 其文章详情页） */
+/* 作者自定义背景（个人主页 / 文章详情，cover 整页铺满） */
 .site-main-body.site-main-body--custom-bg {
-  background-color: #e8eaed;
+  background-color: #1a1d24;
   background-image: var(--author-page-bg);
-  background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   background-attachment: scroll;
+}
+
+.site-main-body.site-main-body--custom-bg.author-bg--cover {
+  background-size: cover;
 }
 
 /* 自定义背景下内容卡片保持可读 */

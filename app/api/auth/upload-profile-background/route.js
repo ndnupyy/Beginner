@@ -13,8 +13,11 @@ import {
   deleteProfileBackgroundFile,
   saveProfileBackgroundFromFormData,
 } from "@/lib/profileBackground";
+import { normalizeUploadFile } from "@/lib/imageMime";
 import { getSessionUserId } from "@/lib/session";
 import { getUserById, updateUserProfileBackground } from "@/lib/users";
+
+export const runtime = "nodejs";
 
 export async function POST(request) {
   try {
@@ -29,7 +32,10 @@ export async function POST(request) {
     }
 
     const formData = await request.formData();
-    const file = formData.get("background");
+    const file = normalizeUploadFile(formData.get("background"), "background.jpg");
+    if (!file) {
+      return NextResponse.json({ error: "请选择背景图片" }, { status: 400 });
+    }
 
     const profileBackgroundUrl = await saveProfileBackgroundFromFormData(file);
 
@@ -44,6 +50,7 @@ export async function POST(request) {
       profileBackgroundUrl: user.profileBackgroundUrl,
     });
   } catch (error) {
+    console.error("[upload-profile-background]", error);
     return NextResponse.json(
       { error: error.message || "背景图上传失败" },
       { status: 400 }
